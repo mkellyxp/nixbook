@@ -23,6 +23,7 @@
   ];
 
   services.flatpak.enable = true;
+  ## flatpak update --noninteractive --assumeyes
 
   system.autoUpgrade.enable = true;
   system.autoUpgrade.channel = "https://nixos.org/channels/nixos-24.05";
