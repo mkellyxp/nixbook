@@ -29,6 +29,12 @@
   system.autoUpgrade.enable = true;
   system.autoUpgrade.channel = "https://nixos.org/channels/nixos-24.05";
 
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+
   systemd.timers."auto-update-config" = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
