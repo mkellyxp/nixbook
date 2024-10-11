@@ -1,5 +1,7 @@
 { config, pkgs, ... }:
 {
+  zramSwap.enable = true;
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
@@ -19,7 +21,6 @@
     htop
     helix
     xclip
-    lazygit
   ];
 
   services.flatpak.enable = true;
@@ -27,5 +28,25 @@
 
   system.autoUpgrade.enable = true;
   system.autoUpgrade.channel = "https://nixos.org/channels/nixos-24.05";
-  # system.autoUpgrade.schedule = "daily";
+
+  systemd.timers."auto-update-config" = {
+  wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "1m";
+      OnUnitActiveSec = "1m";
+      Unit = "auto-update-config.service";
+    };
+  };
+
+  systemd.services."auto-update-config" = {
+    script = ''
+      set -eu
+      ${pkgs.git}/bin/git -C /etc/nixbook pull
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+    };
+    wantedBy = [ "multi-user.target" ]; # Ensure the service starts after rebuild
+  };
 }
