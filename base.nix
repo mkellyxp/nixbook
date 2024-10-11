@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 {
+  # testing
   zramSwap.enable = true;
 
   # Enable the X11 windowing system.
