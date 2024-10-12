@@ -28,6 +28,8 @@
   ## flatpak update --noninteractive --assumeyes
 
   system.autoUpgrade.enable = true;
+  system.autoUpgrade.operation = "boot";
+  system.autoUpgrade.dates = "Mon 04:40";
   system.autoUpgrade.channel = "https://nixos.org/channels/nixos-24.05";
 
   nix.gc = {
