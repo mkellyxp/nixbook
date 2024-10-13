@@ -42,7 +42,7 @@
   wantedBy = [ "timers.target" ];
     timerConfig = {
       OnBootSec = "1m";
-      OnUnitActiveSec = "1m";
+      OnCalendar = "daily";
       Unit = "auto-update-config.service";
     };
   };
@@ -51,6 +51,7 @@
     script = ''
       set -eu
       ${pkgs.git}/bin/git -C /etc/nixbook pull
+      ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
     '';
     serviceConfig = {
       Type = "oneshot";
