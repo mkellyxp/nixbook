@@ -4,7 +4,6 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
 echo "Powerwashing NixBook..."
   rm -rf ~/
   cp -R /etc/nixbook/config/config ~/.config
-  cp -R /etc/nixbook/config/local ~/.local
   reboot
 else
   echo "Powerwashing Cancelled!"
