@@ -2,7 +2,7 @@ read -p "This will delete ALL local files and reset this Nixbook!  Do you want t
 
 if [[ "$answer" =~ ^[Yy]$ ]]; then
 echo "Powerwashing NixBook..."
-  git -C /etc/nixbook pull
+  sudo git -C /etc/nixbook pull
   sudo nixos-rebuild boot --upgrade
   rm -rf ~/
   cp -R /etc/nixbook/config/config ~/.config
