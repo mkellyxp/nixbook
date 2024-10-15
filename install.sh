@@ -1,4 +1,5 @@
-read -p "This will delete ALL local files and convert this machine to a Nixbook!\nDo you want to continue? (y/n): " answer
+echo "This will delete ALL local files and convert this machine to a Nixbook!";
+read -p "Do you want to continue? (y/n): " answer
 
 if [[ "$answer" =~ ^[Yy]$ ]]; then
   echo "Installing NixBook..."
@@ -8,6 +9,7 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
   mkdir ~/Desktop
   mkdir ~/Documents
   mkdir ~/Downloads
+  mkdir ~/Pictures
   cp -R /etc/nixbook/config/config ~/.config
 
   # Add Nixbook config and rebuild
