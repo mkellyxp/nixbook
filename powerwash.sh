@@ -1,4 +1,5 @@
-read -p "This will delete ALL local files and reset this Nixbook!\nDo you want to continue? (y/n): " answer
+echo "This will delete ALL local files and reset this Nixbook!";
+read -p "Do you want to continue? (y/n): " answer
 
 if [[ "$answer" =~ ^[Yy]$ ]]; then
 echo "Powerwashing NixBook..."
@@ -14,6 +15,7 @@ echo "Powerwashing NixBook..."
   mkdir ~/Desktop
   mkdir ~/Documents
   mkdir ~/Downloads
+  mkdir ~/Pictures
   cp -R /etc/nixbook/config/config ~/.config
   
   reboot
