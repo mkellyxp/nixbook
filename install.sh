@@ -1,9 +1,23 @@
-echo "Installing NixBook..."
+read -p "This will delete ALL local files and convert this machine to a Nixbook!\nDo you want to continue? (y/n): " answer
 
-cp -R /etc/nixbook/config/config ~/.config
+if [[ "$answer" =~ ^[Yy]$ ]]; then
+  echo "Installing NixBook..."
 
-sudo sed -i '/hardware-configuration\.nix/a\      /etc/nixbook/base.nix' /etc/nixos/configuration.nix
-sudo nixos-rebuild switch
+  # Set up local files
+  rm -rf ~/
+  mkdir ~/Desktop
+  mkdir ~/Documents
+  mkdir ~/Downloads
+  cp -R /etc/nixbook/config/config ~/.config
 
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-reboot
+  # Add Nixbook config and rebuild
+  sudo sed -i '/hardware-configuration\.nix/a\      /etc/nixbook/base.nix' /etc/nixos/configuration.nix
+  sudo nixos-rebuild switch
+
+  # Add flathub
+  flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  
+  reboot
+else
+  echo "Nixbook Install Cancelled!"
+fi
