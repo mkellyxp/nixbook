@@ -20,6 +20,8 @@ echo "Powerwashing NixBook..."
   sudo nixos-rebuild boot --upgrade
   sudo nixos-rebuild list-generations
 
+  # Add flathub and some apps
+  flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
   flatpak install flathub com.google.Chrome -y
   flatpak install flathub us.zoom.Zoom -y
   
