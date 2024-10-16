@@ -16,6 +16,7 @@
     firefox
     libnotify
     libreoffice
+    xdg-desktop-portal
     gnome.gnome-software
     gnome.gnome-calculator
     gnome.gnome-calendar
