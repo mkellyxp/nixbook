@@ -18,7 +18,11 @@ echo "Powerwashing NixBook..."
   # Clear space and rebuild
   sudo nix-collect-garbage -d
   sudo nixos-rebuild boot --upgrade
-  sudo nixos-rebuild list-generations  
+  sudo nixos-rebuild list-generations
+
+  flatpak install flathub com.google.Chrome -y
+  flatpak install flathub us.zoom.Zoom -y
+  
   reboot
 else
   echo "Powerwashing Cancelled!"
