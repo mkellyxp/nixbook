@@ -13,7 +13,7 @@ echo "Powerwashing NixBook..."
   mkdir ~/Downloads
   mkdir ~/Pictures
   cp -R /etc/nixbook/config/config ~/.config
-  sudo rm -r /var/lib/flatpak/app
+  sudo rm -r /var/lib/flatpak
 
   # Clear space and rebuild
   sudo nix-collect-garbage -d
