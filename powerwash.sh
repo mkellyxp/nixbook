@@ -18,7 +18,7 @@ echo "Powerwashing NixBook..."
   # Clear space and rebuild
   sudo nix-collect-garbage -d
   sudo nixos-rebuild boot --upgrade
-  
+  sudo nixos-rebuild list-generations  
   reboot
 else
   echo "Powerwashing Cancelled!"
