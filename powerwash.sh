@@ -6,10 +6,6 @@ echo "Powerwashing NixBook..."
   # Get latest nixbook code
   sudo git -C /etc/nixbook pull
 
-  # Clear space and rebuild
-  sudo nix-collect-garbage -d
-  sudo nixos-rebuild boot --upgrade
-
   # Erase data and set up home directory again
   rm -rf ~/
   mkdir ~/Desktop
@@ -17,6 +13,11 @@ echo "Powerwashing NixBook..."
   mkdir ~/Downloads
   mkdir ~/Pictures
   cp -R /etc/nixbook/config/config ~/.config
+  sudo rm -r /var/lib/flatpak/app
+
+  # Clear space and rebuild
+  sudo nix-collect-garbage -d
+  sudo nixos-rebuild boot --upgrade
   
   reboot
 else
