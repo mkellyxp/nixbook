@@ -13,7 +13,7 @@
 
   environment.systemPackages = with pkgs; [
     git
-    google-chrome
+    firefox
     libnotify
     libreoffice
     gnome.gnome-software
