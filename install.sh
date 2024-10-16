@@ -16,8 +16,10 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
   sudo sed -i '/hardware-configuration\.nix/a\      /etc/nixbook/base.nix' /etc/nixos/configuration.nix
   sudo nixos-rebuild switch
 
-  # Add flathub
+  # Add flathub and some apps
   flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  flatpak install flathub com.google.Chrome -y
+  flatpak install flathub us.zoom.Zoom -y
   
   reboot
 else
