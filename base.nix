@@ -17,9 +17,9 @@
     libnotify
     libreoffice
     gnome.gnome-software
-    gnome-calculator
-    gnome-calendar
-    gnome-screenshot
+    gnome.gnome-calculator
+    gnome.gnome-calendar
+    gnome.gnome-screenshot
 
     # For Mike.. remove later
     htop
