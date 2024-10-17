@@ -11,6 +11,7 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
   mkdir ~/Downloads
   mkdir ~/Pictures
   cp -R /etc/nixbook/config/config ~/.config
+  cp /etc/nixbook/config/desktop/* ~/Desktop/
 
   # Add Nixbook config and rebuild
   sudo sed -i '/hardware-configuration\.nix/a\      /etc/nixbook/base.nix' /etc/nixos/configuration.nix
