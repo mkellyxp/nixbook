@@ -1,8 +1,10 @@
 ![nixbook os logo](https://github.com/user-attachments/assets/8511e040-ebf0-4090-b920-c051b23fcc9c)
 
-The nixbook project aims to create a user friendly, lightweight, durable, and auto updating operating system build on top of NixOS.  The goal is have a "chromebook like" computer to give to basic users.
+Convert your old laptop (even chromebook) to a user friendly, lightweight, durable, and auto updating operating system build on top of NixOS.
 
-![Screenshot from 2024-10-12 10-37-56](https://github.com/user-attachments/assets/3d8d8a3a-b2eb-4193-8177-44935fe2e973)
+The goal is to create a "chromebook like" unbreakable computer to give to basic users who know nothing about Linux and won't need to ever worry about updates / upgrades.
+
+![Screenshot from 2024-10-17 09-05-35](https://github.com/user-attachments/assets/5564c57f-078b-429b-923f-49c2f215a907)
 
 ![Screenshot from 2024-10-12 10-38-03](https://github.com/user-attachments/assets/359b51ab-996d-47b2-9d4d-aa357d328b6c)
 
