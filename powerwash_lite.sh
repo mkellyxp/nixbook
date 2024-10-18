@@ -1,8 +1,9 @@
-echo "This will delete ALL local files and reset this Nixbook!";
+
+echo "This will delete ALL local files and reset this Nixbook Lite!";
 read -p "Do you want to continue? (y/n): " answer
 
 if [[ "$answer" =~ ^[Yy]$ ]]; then
-echo "Powerwashing NixBook..."
+echo "Powerwashing NixBook Lite..."
   # Get latest nixbook code
   sudo git -C /etc/nixbook pull
 
@@ -14,18 +15,11 @@ echo "Powerwashing NixBook..."
   mkdir ~/Pictures
   cp -R /etc/nixbook/config/config ~/.config
   cp /etc/nixbook/config/desktop/* ~/Desktop/
-  sudo rm -r /var/lib/flatpak
 
   # Clear space and rebuild
   sudo nix-collect-garbage -d
   sudo nixos-rebuild boot --upgrade
   sudo nixos-rebuild list-generations
-
-  # Add flathub and some apps
-  flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-  flatpak install flathub com.google.Chrome -y
-  flatpak install flathub us.zoom.Zoom -y
-  flatpak install flathub org.libreoffice.LibreOffice -y
   
   reboot
 else

@@ -1,3 +1,4 @@
+
 { config, pkgs, ... }:
 {
   # testing
@@ -14,8 +15,6 @@
   environment.systemPackages = with pkgs; [
     git
     firefox
-    libnotify
-    gnome.gnome-software
     gnome.gnome-calculator
     gnome.gnome-calendar
     gnome.gnome-screenshot
@@ -31,7 +30,7 @@
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than 30d";
+    options = "--delete-older-than 14d";
   };
 
   systemd.timers."auto-update-config" = {
@@ -47,7 +46,6 @@
     script = ''
       set -eu
       ${pkgs.git}/bin/git -C /etc/nixbook pull
-      ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
     '';
     serviceConfig = {
       Type = "oneshot";

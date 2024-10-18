@@ -21,6 +21,7 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
   flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
   flatpak install flathub com.google.Chrome -y
   flatpak install flathub us.zoom.Zoom -y
+  flatpak install flathub org.libreoffice.LibreOffice -y
   
   reboot
 else
