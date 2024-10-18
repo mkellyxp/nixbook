@@ -43,7 +43,7 @@
   systemd.services."auto-update-config" = {
     script = ''
       set -eu
-      ${pkgs.git}/bin/git -C /etc/nixbook pull
+      ${pkgs.git}/bin/git -C /etc/nixbook pull --depth 1
     '';
     serviceConfig = {
       Type = "oneshot";
