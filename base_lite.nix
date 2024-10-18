@@ -20,8 +20,6 @@
     gnome.gnome-screenshot
   ];
 
-  services.flatpak.enable = true;
-
   system.autoUpgrade.enable = true;
   system.autoUpgrade.operation = "boot";
   system.autoUpgrade.dates = "Mon 04:40";
