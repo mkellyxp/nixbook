@@ -19,6 +19,10 @@
     gnome.gnome-calculator
     gnome.gnome-calendar
     gnome.gnome-screenshot
+    flatpak
+    xdg-desktop-portal
+    xdg-desktop-portal-gtk
+    xdg-desktop-portal-gnome
   ];
 
   services.flatpak.enable = true;
