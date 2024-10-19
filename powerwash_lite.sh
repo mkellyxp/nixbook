@@ -13,8 +13,8 @@ echo "Powerwashing NixBook Lite..."
   mkdir ~/Documents
   mkdir ~/Downloads
   mkdir ~/Pictures
-  cp -R /etc/nixbook/config/config ~/.config
-  cp /etc/nixbook/config/desktop/* ~/Desktop/
+  cp -R /etc/nixbook/config/config_lite ~/.config
+  cp /etc/nixbook/config/desktop_lite/* ~/Desktop/
 
   # Clear space and rebuild
   sudo nix-collect-garbage -d
