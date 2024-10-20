@@ -2,7 +2,7 @@
 Version=1.0
 Name=Powerwash
 Comment=Run powerwash script
-Exec=gnome-terminal -- /etc/nixbook/powerwash.sh
+Exec=gnome-terminal -- /etc/nixbook/powerwash_lite.sh
 Icon=utilities-terminal
 Terminal=true
 Type=Application
