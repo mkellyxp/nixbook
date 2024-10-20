@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Update and Reboot
+Comment=Run update and reboot script
+Exec=gnome-terminal -- /etc/nixbook/update.sh
+Icon=utilities-terminal
+Terminal=true
+Type=Application
+Categories=System;Utility;
