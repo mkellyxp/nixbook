@@ -6,6 +6,7 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
 
   # Set up local files
   rm -rf ~/
+  sudo rm -r /var/lib/flatpak
   mkdir ~/Desktop
   mkdir ~/Documents
   mkdir ~/Downloads
