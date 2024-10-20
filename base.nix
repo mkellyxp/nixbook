@@ -15,7 +15,7 @@
     cheese
     gnome-music
     geary
-    ephiphany
+    epiphany
     yelp
   ]);
   programs.dconf.enable = true;
