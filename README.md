@@ -24,15 +24,26 @@ The goal is to create a "chromebook like" unbreakable computer to give to basic 
 
 ## Step 4:  Reboot, login, and run "nmtui" to connect to wifi, then hit ESC
 
+```
+nmtui
+```
+
 ![Screenshot from 2024-10-12 10-30-08](https://github.com/user-attachments/assets/5ab1db5e-ee71-4df5-89dd-18ebdc49d5e4)
 
 
 ## Step 5:  Run "cd /etc/" and then "nix-shell -p git" to download git
+```
+cd /etc/
+nix-shell -p git
+```
 
 ![Screenshot from 2024-10-12 10-30-44](https://github.com/user-attachments/assets/4dbfed1b-fe37-434e-980a-d8242148badf)
 
 
 ## Step 6:  Run "sudo git clone https://github.com/mkellyxp/nixbook"  (make sure you run as sudo and you're in /etc!)
+```
+sudo git clone https://github.com/mkellyxp/nixbook
+```
 
 ## Step 7:  Run "cd nixbook" and run "./install.sh" (run this with NO sudo)
 
