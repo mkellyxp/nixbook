@@ -16,33 +16,10 @@
     geary
   ]);
   programs.dconf.enable = true;
-  #programs.dconf.profiles.user.databases = [
-  #  {
-  #    settings = {
-  #      "org/gnome/desktop/interface" = {
-  #        color-scheme = "prefer-dark";
-  #      };
-  #      "org/gnome/shell" = {
-  #        favorite-apps = [
-  #          "firefox.desktop"
-  #          "org.gnome.Nautilus.desktop"
-  #        ];
-  #        disable-user-extensions = false;
-  #        enabled-extensions = [
-  #          "dash-to-panel@jederose9.github.com"
-  #          "caffeine@patapon.info"
-  #          "clipboard-indicator@tudmotu.com"
-  #        ];
-  #      };
-  #    };
-  #  }
-  #];
 
   environment.systemPackages = with pkgs; [
     git
     firefox
-    libnotify
-    gnome.gnome-tweaks
     # Gnome Extensions
     gnomeExtensions.dash-to-panel
     gnomeExtensions.caffeine
