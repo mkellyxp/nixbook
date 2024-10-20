@@ -10,6 +10,8 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
   environment.gnome.excludePackages = (with pkgs; [
+    gnome-tour
+    flatpak
   ]) ++ (with pkgs.gnome; [
     cheese
     gnome-music
