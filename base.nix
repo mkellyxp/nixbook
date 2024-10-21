@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 {
-  # testing
   zramSwap.enable = true;
+  systemd.defaultTimeoutStopSec = "10s";
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
