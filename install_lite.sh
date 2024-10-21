@@ -19,8 +19,6 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
   # Add Nixbook config and rebuild
   sudo sed -i '/hardware-configuration\.nix/a\      /etc/nixbook/base_lite.nix' /etc/nixos/configuration.nix
   sudo nixos-rebuild switch
-
-  # Lite has no flathub to save space
   
   reboot
 else
