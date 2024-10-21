@@ -16,7 +16,7 @@ echo "Powerwashing NixBook..."
   mkdir ~/.local/share
   cp -R /etc/nixbook/config/config ~/.config
   cp /etc/nixbook/config/desktop/* ~/Desktop/
-  cp /etc/nixbook/config/applications ~/.local/share/applications
+  cp -R /etc/nixbook/config/applications ~/.local/share/applications
 
   sudo rm -r /var/lib/flatpak
 
