@@ -4,6 +4,19 @@
 
 The goal is to create a "chromebook like" unbreakable computer to give to basic users who know nothing about Linux and won't need to ever worry about updates / upgrades.
 
+The default **nixbook** version:
+- * 32 gigs of storage and 4 gigs of ram recommended *
+- configured cinnamon desktop and firefox base
+- Chrome, Zoom, and Libreoffice installed by default flathub enabled out of the box.
+- Automatic weekly updates with 4 weeks of roll backs
+
+
+The **nixbook lite** version:
+- * 16 gigs of storage and 2gigs of ram recommended *
+- configured cinnamon desktop and firefox base
+- Automatic weekly updates with 2 weeks of roll backs
+  
+
 ![Screenshot from 2024-10-17 09-05-35](https://github.com/user-attachments/assets/5564c57f-078b-429b-923f-49c2f215a907)
 
 
@@ -22,32 +35,36 @@ The goal is to create a "chromebook like" unbreakable computer to give to basic 
 ![Screenshot from 2024-10-12 10-24-44](https://github.com/user-attachments/assets/968111d9-c018-4be5-8aaa-ee5c647b2617)
 
 
-## Step 4:  Reboot, login, and run "nmtui" to connect to wifi, then hit ESC
+## Step 4:  Reboot, login, and connect to wifi, then hit ESC
 
 ```
 nmtui
 ```
 
-![Screenshot from 2024-10-12 10-30-08](https://github.com/user-attachments/assets/5ab1db5e-ee71-4df5-89dd-18ebdc49d5e4)
 
-
-## Step 5:  Run "cd /etc/" and then "nix-shell -p git" to download git
+## Step 5:  Go to /etc and have git ready
 ```
 cd /etc/
 nix-shell -p git
 ```
 
-![Screenshot from 2024-10-12 10-30-44](https://github.com/user-attachments/assets/4dbfed1b-fe37-434e-980a-d8242148badf)
 
-
-## Step 6:  Run "sudo git clone https://github.com/mkellyxp/nixbook"  (make sure you run as sudo and you're in /etc!)
+## Step 6:  Clone the nixbook repo  (make sure you run as sudo and you're in /etc!)
 ```
 sudo git clone https://github.com/mkellyxp/nixbook
 ```
 
-## Step 7:  Run "cd nixbook" and run "./install.sh" (run this with NO sudo)
+## Step 7:  Run the install script (run this with NO sudo)
+```
+cd nixbook
+./install.sh
+```
 
-![Screenshot from 2024-10-12 10-32-06](https://github.com/user-attachments/assets/e5acdb79-3b62-4662-b2e8-da9246a67bea)
+* or for nixbook lite *
+```
+cd nixbook
+./install_lite.sh
+```
 
 
 ## Step 8:  The install script will ask for your admin password one more time, to install flathub, and will reboot!
