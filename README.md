@@ -7,7 +7,7 @@ The goal is to create a "chromebook like" unbreakable computer to give to basic 
 ---
 
 The default **nixbook** version:
-- *32 gigs of storage and 4 gigs of ram recommended*
+- ***32 gigs of storage and 4 gigs of ram recommended***
 - configured cinnamon desktop and firefox base
 - Chrome, Zoom, and Libreoffice installed by default flathub enabled out of the box.
 - Automatic weekly OS updates with 4 weeks of roll backs
@@ -15,7 +15,7 @@ The default **nixbook** version:
 
 
 The **nixbook lite** version:
-- *16 gigs of storage and 2gigs of ram recommended*
+- ***16 gigs of storage and 2gigs of ram recommended***
 - configured cinnamon desktop and firefox base
 - Automatic weekly updates with 2 weeks of roll backs
   
