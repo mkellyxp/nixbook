@@ -15,7 +15,7 @@ The default **nixbook** version:
 
 
 The **nixbook lite** version:
-- ***16 gigs of storage and 2gigs of ram recommended***
+- ***16 gigs of storage and 2 gigs of ram recommended***
 - configured cinnamon desktop and firefox base
 - Automatic weekly updates with 2 weeks of roll backs
   
