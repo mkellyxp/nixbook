@@ -6,6 +6,7 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
 
   # Set up local files
   rm -rf ~/
+  sudo rm -r /var/lib/flatpak
   mkdir ~/Desktop
   mkdir ~/Documents
   mkdir ~/Downloads
@@ -22,9 +23,8 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
 
   # Add flathub and some apps
   flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-  flatpak install flathub com.google.Chrome -y
-  flatpak install flathub us.zoom.Zoom -y
-  flatpak install flathub org.libreoffice.LibreOffice -y
+  #flatpak install flathub com.google.Chrome -y
+  #flatpak install flathub us.zoom.Zoom -y
   
   reboot
 else
