@@ -17,6 +17,8 @@
     git
     firefox
     libnotify
+    gawk
+    sudo
     gnome.gnome-software
     gnome.gnome-calculator
     gnome.gnome-calendar
@@ -54,6 +56,18 @@
       set -eu
       ${pkgs.git}/bin/git -C /etc/nixbook pull
       ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
+
+      uptime_seconds=$(cat /proc/uptime | ${pkgs.gawk}/bin/awk '{print $1}' | cut -d. -f1)
+      days=$((uptime_seconds / 86400))
+
+      if [ "$days" -gt 25 ]; then
+        sessions=$(loginctl list-sessions --no-legend | ${pkgs.gawk}/bin/awk '{print $1}')
+        for session in $sessions; do
+          user=$(loginctl show-session "$session" -p Name | cut -d'=' -f2)
+          ${pkgs.sudo}/bin/sudo -u "$user" "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u "$user")/bus" ${pkgs.libnotify}/bin/notify-send "Please reboot to apply updates" "Updates have already been downloaded and installed.  Simply reboot to apply these updates."
+        done
+      fi
+
     '';
     serviceConfig = {
       Type = "oneshot";
