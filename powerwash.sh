@@ -22,11 +22,11 @@ echo "Powerwashing NixBook..."
 
   # Clear space and rebuild
   sudo nix-collect-garbage -d
-  sudo nixos-rebuild boot --upgrade
+  sudo nixos-rebuild switch --upgrade
   sudo nixos-rebuild list-generations
 
   # Add flathub and some apps
-  flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
   flatpak install flathub com.google.Chrome -y
   flatpak install flathub us.zoom.Zoom -y
   flatpak install flathub org.libreoffice.LibreOffice -y
