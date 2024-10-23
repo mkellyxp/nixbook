@@ -1,6 +1,6 @@
 ![nixbook os logo](https://github.com/user-attachments/assets/8511e040-ebf0-4090-b920-c051b23fcc9c)
 
-**Convert your old laptop (even chromebook) to a user friendly, lightweight, durable, and auto updating operating system build on top of NixOS.**
+**Convert your old computer (even chromebook) to a user friendly, lightweight, durable, and auto updating operating system build on top of NixOS.**
 
 The goal is to create a "chromebook like" unbreakable computer to give to basic users who know nothing about Linux and won't need to ever worry about updates / upgrades.
 
@@ -33,7 +33,7 @@ The **nixbook lite** version:
 ![Screenshot from 2024-10-12 10-24-31](https://github.com/user-attachments/assets/77b02843-4c3e-409c-82dc-7579578b2582)
 
 
-## Step 3:  Format your drive however you like (Enable swap if you have more than 16gig of hard drive space)
+## Step 3:  Format your drive however you like (erase disk, swap, no hibernate)
 
 ![Screenshot from 2024-10-12 10-24-44](https://github.com/user-attachments/assets/968111d9-c018-4be5-8aaa-ee5c647b2617)
 
@@ -45,7 +45,7 @@ nmtui
 ```
 
 
-## Step 5:  Go to /etc and have git ready
+## Step 5:  Go to /etc and nix-shell git
 ```
 cd /etc/
 nix-shell -p git
@@ -70,14 +70,10 @@ cd nixbook
 ```
 
 
-## Step 8:  The install script will ask for your admin password one more time, to install flathub, and will reboot!
-
-![Screenshot from 2024-10-12 10-36-59](https://github.com/user-attachments/assets/9c5cbec7-2d84-4047-a364-addd67b0d074)
-
-
-## Step 9:  Enjoy nixbook!
+## Step 8:  Enjoy nixbook!
 
 You can always manually run updates by running **Update and Reboot** in the menu.
+
 If you want to completely reset this nixbook, wipe off your personal data to give it to someone else, or start fresh, run **Powerwash** from the menu.
 
 ---
