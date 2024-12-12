@@ -25,14 +25,16 @@
     gnome.gnome-screenshot
   ];
 
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.operation = "boot";
-  system.autoUpgrade.dates = "Mon 04:40";
-  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-24.05";
+  system.autoUpgrade = {
+    enable = true;
+    operation = "boot";
+    dates = "Mon 04:40";
+    channel = "https://nixos.org/channels/nixos-24.05";
+  };
 
   nix.gc = {
     automatic = true;
-    dates = "weekly";
+    dates = "Mon 3:40";
     options = "--delete-older-than 14d";
   };
 
