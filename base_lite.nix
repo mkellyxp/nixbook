@@ -30,19 +30,17 @@
   system.autoUpgrade.dates = "Mon 04:40";
   system.autoUpgrade.channel = "https://nixos.org/channels/nixos-24.05";
 
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 14d";
+  system.autoUpgrade = {
+    enable = true;
+    operation = "boot";
+    dates = "Mon 04:40";
+    channel = "https://nixos.org/channels/nixos-24.05";
   };
 
-  systemd.timers."auto-update-config" = {
-  wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnBootSec = "1m";
-      OnCalendar = "daily";
-      Unit = "auto-update-config.service";
-    };
+  nix.gc = {
+    automatic = true;
+    dates = "Mon 3:40";
+    options = "--delete-older-than 14d";
   };
 
   systemd.services."auto-update-config" = {
