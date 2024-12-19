@@ -56,8 +56,8 @@
   systemd.services."auto-update-config" = {
     script = ''
       set -eu
-      ${pkgs.git}/bin/git -C /etc/nixbook pull
-      ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
+      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.git}/bin/git -C /etc/nixbook pull
+      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
 
       uptime_seconds=$(cat /proc/uptime | ${pkgs.gawk}/bin/awk '{print $1}' | cut -d. -f1)
       days=$((uptime_seconds / 86400))
