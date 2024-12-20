@@ -29,7 +29,7 @@
     enable = true;
     operation = "boot";
     dates = "Mon 04:40";
-    channel = "https://nixos.org/channels/nixos-24.05";
+    channel = "https://nixos.org/channels/nixos-24.11";
   };
 
   nix.gc = {
