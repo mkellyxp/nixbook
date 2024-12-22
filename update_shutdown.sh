@@ -1,4 +1,4 @@
-echo "This will update your Nixbook and reboot";
+echo "This will update your Nixbook and shut down";
 read -p "Do you want to continue? (y/n): " answer
 
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -12,15 +12,16 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
   sudo nix-channel --add "${AUTOUPDATE_CHANNEL}" nixos
 
   # Free up space before updates
-  nix-collect-garbage --delete-older-than 14d
+  nix-collect-garbage --delete-older-than 30d
 
   # get the updates
+  flatpak update -y
   sudo nixos-rebuild boot --upgrade
 
   # free up a little more space with hard links
   nix-store --optimise
 
-  reboot
+  systemctl poweroff
 else
   echo "Update Cancelled!"
 fi

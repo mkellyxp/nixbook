@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Update and Shut Down
+Comment=Run update and shut down script
+Exec=gnome-terminal -- /etc/nixbook/update_shutdown_lite.sh
+Icon=utilities-terminal
+Terminal=true
+Type=Application
+Categories=System;Utility;

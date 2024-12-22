@@ -1,4 +1,4 @@
-echo "This will update your Nixbook and reboot";
+echo "This will update your Nixbook and shut down";
 read -p "Do you want to continue? (y/n): " answer
 
 if [[ "$answer" =~ ^[Yy]$ ]]; then
@@ -20,7 +20,7 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
   # free up a little more space with hard links
   nix-store --optimise
 
-  reboot
+  systemctl poweroff
 else
   echo "Update Cancelled!"
 fi
