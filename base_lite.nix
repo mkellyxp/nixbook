@@ -52,7 +52,7 @@
       set -eu
       ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.git}/bin/git -C /etc/nixbook reset --hard
       ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
-      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.git}/bin/git -C /etc/nixbook pull
+      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.git}/bin/git -C /etc/nixbook pull --rebase
 
       # Get the timestamp of the current generation
       last_gen_time=$(${pkgs.nix}/bin/nix-env --list-generations --profile /nix/var/nix/profiles/system | ${pkgs.gawk}/bin/awk 'END {print $2, $3}')

@@ -7,7 +7,7 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
   # Download the latest nixbook changes
   sudo git -C /etc/nixbook reset --hard
   sudo git -C /etc/nixbook clean -fd
-  sudo git -C /etc/nixbook pull
+  sudo git -C /etc/nixbook pull --rebase
 
   # Update the nixos nix-channel to be the same as config.system.autoUpgrade.channel in base.nix or base_lite.nix
   AUTOUPDATE_CHANNEL="$(sudo nix-instantiate --eval '<nixpkgs/nixos>' -A config.system.autoUpgrade.channel | tr -d '"')"
