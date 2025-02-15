@@ -92,3 +92,23 @@ Notes:
 ---
 
 This is a passion project of mine, that I'm using for friends, family, and my local community at large.  If you have any feedback or suggestions, please feel free to open an issue, pull request or just message me.
+
+---
+
+If at any point you're having issues with your nixbook not updating, check the auto-update-config service by running 
+
+```
+sudo systemctl status auto-update-config
+```
+
+If it shows any errors, go directly to /etc/nixbook and run
+
+```
+sudo git pull --rebase
+```
+
+Then you can start the autoupdate service again by running
+
+```
+sudo systemctl status auto-update-config
+```
