@@ -28,10 +28,10 @@
     gawk
     gnugrep
     sudo
-    gnome.gnome-software
-    gnome.gnome-calculator
-    gnome.gnome-calendar
-    gnome.gnome-screenshot
+    gnome-software
+    gnome-calculator
+    gnome-calendar
+    gnome-screenshot
     flatpak
     xdg-desktop-portal
     xdg-desktop-portal-gtk
@@ -67,9 +67,9 @@
       set -eu
 
       # Update nixbook configs
-      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.git}/bin/git -C /etc/nixbook reset --hard
-      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
-      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.git}/bin/git -C /etc/nixbook pull --rebase
+      ${pkgs.git}/bin/git -C /etc/nixbook reset --hard
+      ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
+      ${pkgs.git}/bin/git -C /etc/nixbook pull --rebase
 
       # Flatpak Updates
       ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
