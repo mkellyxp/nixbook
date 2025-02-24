@@ -5,6 +5,9 @@
 The goal is to create a "chromebook like" unbreakable computer to give to basic users who know nothing about Linux and won't need to ever worry about updates / upgrades.
 
 ---
+Full video walk through of converting from Windows to Nixbook is now live here:
+<https://www.youtube.com/watch?v=uA-TjNQVR-M>
+---
 
 The default **nixbook** version:
 - ***32 gigs of storage and 4 gigs of ram recommended***
