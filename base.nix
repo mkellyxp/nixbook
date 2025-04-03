@@ -74,6 +74,9 @@
       # Flatpak Updates
       ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
 
+      # Flatpak Override for Blank Screens in Zoom
+      flatpak override --user --env=ZYPAK_ZYGOTE_STRATEGY_SPAWN=0 us.zoom.Zoom
+
       # Notify users if update or reboot hasn't been applied in 25 days
       last_gen_time=$(${pkgs.nix}/bin/nix-env --list-generations --profile /nix/var/nix/profiles/system | ${pkgs.gawk}/bin/awk 'END {print $2, $3}')
       last_gen_sec=$(date -d "$last_gen_time" +%s)
