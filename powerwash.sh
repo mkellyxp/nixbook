@@ -33,6 +33,9 @@ echo "Powerwashing NixBook..."
   flatpak install flathub com.google.Chrome -y
   flatpak install flathub us.zoom.Zoom -y
   flatpak install flathub org.libreoffice.LibreOffice -y
+
+  # Flatpak Override for Blank Screens in Zoom
+  flatpak override --user --env=ZYPAK_ZYGOTE_STRATEGY_SPAWN=0 us.zoom.Zoom
   
   reboot
 else
