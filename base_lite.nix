@@ -41,7 +41,7 @@
   systemd.timers."auto-update-config" = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnBootSec = "1m";
+      OnBootSec = "5m";
       OnCalendar = "daily";
       Unit = "auto-update-config.service";
     };
