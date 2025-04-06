@@ -103,6 +103,10 @@
       Type = "oneshot";
       User = "root";
     };
-    wantedBy = [ "multi-user.target" ]; # Ensure the service starts after rebuild
+
+    after = [ "network-online.target" "graphical.target" ];
+    wants = [ "network-online.target" ];
+  
+    wantedBy = [ "default.target" ];
   };
 }

@@ -20,9 +20,9 @@
     libnotify
     gawk
     sudo
-    gnome.gnome-calculator
-    gnome.gnome-calendar
-    gnome.gnome-screenshot
+    gnome-calculator
+    gnome-calendar
+    gnome-screenshot
   ];
 
   system.autoUpgrade = {
@@ -89,6 +89,9 @@
       Type = "oneshot";
       User = "root";
     };
-    wantedBy = [ "multi-user.target" ]; # Ensure the service starts after rebuild
+    after = [ "network-online.target" "graphical.target" ];
+    wants = [ "network-online.target" ];
+  
+    wantedBy = [ "default.target" ];
   };
 }
