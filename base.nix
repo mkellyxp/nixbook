@@ -110,3 +110,8 @@
     wantedBy = [ "default.target" ];
   };
 }
+
+## WIP Notes:
+# 
+# channel_url=$(nix-channel --list | awk '$1 == "nixos" { print $2 }')
+# 
