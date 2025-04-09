@@ -44,19 +44,13 @@ in
 
   services.flatpak.enable = true;
 
-  system.autoUpgrade = {
-    enable = true;
-    operation = "boot";
-    dates = "Mon 04:40";
-    channel = nixChannel;
-  };
-
   nix.gc = {
     automatic = true;
     dates = "Mon 3:40";
     options = "--delete-older-than 30d";
   };
-
+  
+  # Auto update config, flatpak and channel
   systemd.timers."auto-update-config" = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
@@ -101,9 +95,34 @@ in
   
     wantedBy = [ "default.target" ];
   };
-}
 
-## WIP Notes:
-# 
-# channel_url=$(nix-channel --list | awk '$1 == "nixos" { print $2 }')
-# 
+  # Auto Upgrade NixOS
+  systemd.timers."auto-upgrade" = {
+  wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "10m";
+      OnCalendar = "weekly";
+      Unit = "auto-upgrade.service";
+    };
+  };
+
+  systemd.services."auto-upgrade" = {
+    script = ''
+      set -eu
+      export PATH=${pkgs.nixos-rebuild}/bin:${pkgs.nix}/bin:${pkgs.systemd}/bin:$PATH
+      export NIX_PATH="nixpkgs=${pkgs.path} nixos-config=/etc/nixos/configuration.nix"
+      
+      systemctl start auto-update-config.service
+      nixos-rebuild boot --upgrade
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+    };
+
+    after = [ "network-online.target" "graphical.target" ];
+    wants = [ "network-online.target" ];
+  
+    wantedBy = [ "default.target" ];
+  };
+}
