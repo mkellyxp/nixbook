@@ -87,7 +87,6 @@ in
         echo "Nix channel is already set to $targetChannel"
       fi
       
-
       # Flatpak Updates
       ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
     '';
