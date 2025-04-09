@@ -39,6 +39,7 @@ in
     xdg-desktop-portal
     xdg-desktop-portal-gtk
     xdg-desktop-portal-gnome
+    system-config-printer
   ];
 
   services.flatpak.enable = true;

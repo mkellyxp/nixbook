@@ -26,6 +26,7 @@ in
     gnome-calculator
     gnome-calendar
     gnome-screenshot
+    system-config-printer
   ];
 
   system.autoUpgrade = {
