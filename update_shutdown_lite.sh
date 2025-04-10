@@ -7,7 +7,7 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
   sudo systemctl start auto-update-config.service;
 
   # Free up space before updates
-  nix-collect-garbage --delete-older-than 30d
+  nix-collect-garbage --delete-older-than 14d
 
   # get the updates
   sudo nixos-rebuild boot --upgrade

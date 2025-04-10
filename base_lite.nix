@@ -29,19 +29,13 @@ in
     system-config-printer
   ];
 
-  system.autoUpgrade = {
-    enable = true;
-    operation = "boot";
-    dates = "Mon 04:40";
-    channel = nixChannel;
-  };
-
   nix.gc = {
     automatic = true;
     dates = "Mon 3:40";
     options = "--delete-older-than 14d";
   };
 
+  # Auto update config, channel
   systemd.timers."auto-update-config" = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
@@ -54,21 +48,22 @@ in
   systemd.services."auto-update-config" = {
     script = ''
       set -eu
+      export PATH=${pkgs.git}/bin:${pkgs.nix}/bin:${pkgs.gnugrep}/bin:${pkgs.gawk}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin::$PATH
 
       # Update nixbook configs
-      ${pkgs.git}/bin/git -C /etc/nixbook reset --hard
-      ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
-      ${pkgs.git}/bin/git -C /etc/nixbook pull --rebase
+      git -C /etc/nixbook reset --hard
+      git -C /etc/nixbook clean -fd
+      git -C /etc/nixbook pull --rebase
 
-      currentChannel=$(${pkgs.nix}/bin/nix-channel --list | ${pkgs.gnugrep}/bin/grep '^nixos' | ${pkgs.gawk}/bin/awk '{print $2}')
+      currentChannel=$(nix-channel --list | grep '^nixos' | awk '{print $2}')
       targetChannel="${nixChannel}"
 
       echo "Current Channel is: $currentChannel"
 
       if [ "$currentChannel" != "$targetChannel" ]; then
         echo "Updating Nix channel to $targetChannel"
-        ${pkgs.nix}/bin/nix-channel --add "$targetChannel" nixos
-        ${pkgs.nix}/bin/nix-channel --update
+        nix-channel --add "$targetChannel" nixos
+        nix-channel --update
       else
         echo "Nix channel is already set to $targetChannel"
       fi
@@ -82,4 +77,35 @@ in
   
     wantedBy = [ "default.target" ];
   };
+
+  # Auto Upgrade NixOS
+  systemd.timers."auto-upgrade" = {
+  wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "10m";
+      OnCalendar = "weekly";
+      Unit = "auto-upgrade.service";
+    };
+  };
+
+  systemd.services."auto-upgrade" = {
+    script = ''
+      set -eu
+      export PATH=${pkgs.nixos-rebuild}/bin:${pkgs.nix}/bin:${pkgs.systemd}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin:$PATH
+      export NIX_PATH="nixpkgs=${pkgs.path} nixos-config=/etc/nixos/configuration.nix"
+      
+      systemctl start auto-update-config.service
+      nice -n 19 ionice -c 3 nixos-rebuild boot --upgrade
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+    };
+
+    after = [ "network-online.target" "graphical.target" ];
+    wants = [ "network-online.target" ];
+  
+    wantedBy = [ "default.target" ];
+  };
+  
 }
