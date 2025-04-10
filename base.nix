@@ -1,4 +1,7 @@
 { config, pkgs, ... }:
+let
+  nixChannel = "https://nixos.org/channels/nixos-24.11"; 
+in
 {
   zramSwap.enable = true;
   systemd.extraConfig = ''
@@ -28,35 +31,30 @@
     gawk
     gnugrep
     sudo
-    gnome.gnome-software
-    gnome.gnome-calculator
-    gnome.gnome-calendar
-    gnome.gnome-screenshot
+    gnome-software
+    gnome-calculator
+    gnome-calendar
+    gnome-screenshot
     flatpak
     xdg-desktop-portal
     xdg-desktop-portal-gtk
     xdg-desktop-portal-gnome
+    system-config-printer
   ];
 
   services.flatpak.enable = true;
-
-  system.autoUpgrade = {
-    enable = true;
-    operation = "boot";
-    dates = "Mon 04:40";
-    channel = "https://nixos.org/channels/nixos-24.11";
-  };
 
   nix.gc = {
     automatic = true;
     dates = "Mon 3:40";
     options = "--delete-older-than 30d";
   };
-
+  
+  # Auto update config, flatpak and channel
   systemd.timers."auto-update-config" = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnBootSec = "1m";
+      OnBootSec = "5m";
       OnCalendar = "daily";
       Unit = "auto-update-config.service";
     };
@@ -65,44 +63,67 @@
   systemd.services."auto-update-config" = {
     script = ''
       set -eu
+      export PATH=${pkgs.git}/bin:${pkgs.nix}/bin:${pkgs.gnugrep}/bin:${pkgs.gawk}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin:${pkgs.flatpak}/bin:$PATH
 
       # Update nixbook configs
-      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.git}/bin/git -C /etc/nixbook reset --hard
-      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
-      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.git}/bin/git -C /etc/nixbook pull --rebase
+      git -C /etc/nixbook reset --hard
+      git -C /etc/nixbook clean -fd
+      git -C /etc/nixbook pull --rebase
 
-      # Flatpak Updates
-      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
+      currentChannel=$(nix-channel --list | grep '^nixos' | awk '{print $2}')
+      targetChannel="${nixChannel}"
 
-      # Notify users if update or reboot hasn't been applied in 25 days
-      last_gen_time=$(${pkgs.nix}/bin/nix-env --list-generations --profile /nix/var/nix/profiles/system | ${pkgs.gawk}/bin/awk 'END {print $2, $3}')
-      last_gen_sec=$(date -d "$last_gen_time" +%s)
-      now=$(date +%s)
-      days_since_last_gen=$((($now - $last_gen_sec) / 86400))
+      echo "Current Channel is: $currentChannel"
 
-      if [ "$days_since_last_gen" -gt 25 ]; then
-        sessions=$(loginctl list-sessions --no-legend | ${pkgs.gawk}/bin/awk '{print $1}')
-        for session in $sessions; do
-          user=$(loginctl show-session "$session" -p Name | cut -d'=' -f2)
-          ${pkgs.sudo}/bin/sudo -u "$user" "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u "$user")/bus" ${pkgs.libnotify}/bin/notify-send "System has not been updated recently" "Please run Update and Reboot or Update and Shutdown from the Start Menu under Administration."
-        done
+      if [ "$currentChannel" != "$targetChannel" ]; then
+        echo "Updating Nix channel to $targetChannel"
+        nix-channel --add "$targetChannel" nixos
+        nix-channel --update
       else
-        uptime_seconds=$(cat /proc/uptime | ${pkgs.gawk}/bin/awk '{print $1}' | cut -d. -f1)
-        days=$((uptime_seconds / 86400))
-
-        if [ "$days" -gt 25 ]; then
-          sessions=$(loginctl list-sessions --no-legend | ${pkgs.gawk}/bin/awk '{print $1}')
-          for session in $sessions; do
-            user=$(loginctl show-session "$session" -p Name | cut -d'=' -f2)
-            ${pkgs.sudo}/bin/sudo -u "$user" "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u "$user")/bus" ${pkgs.libnotify}/bin/notify-send "Please reboot to apply updates" "Updates have already been downloaded and installed.  Simply reboot to apply these updates."
-          done
-        fi
+        echo "Nix channel is already set to $targetChannel"
       fi
+      
+      # Flatpak Updates
+      nice -n 19 ionice -c 3 flatpak update --noninteractive --assumeyes
     '';
     serviceConfig = {
       Type = "oneshot";
       User = "root";
     };
-    wantedBy = [ "multi-user.target" ]; # Ensure the service starts after rebuild
+
+    after = [ "network-online.target" "graphical.target" ];
+    wants = [ "network-online.target" ];
+  
+    wantedBy = [ "default.target" ];
+  };
+
+  # Auto Upgrade NixOS
+  systemd.timers."auto-upgrade" = {
+  wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "10m";
+      OnCalendar = "weekly";
+      Unit = "auto-upgrade.service";
+    };
+  };
+
+  systemd.services."auto-upgrade" = {
+    script = ''
+      set -eu
+      export PATH=${pkgs.nixos-rebuild}/bin:${pkgs.nix}/bin:${pkgs.systemd}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin:$PATH
+      export NIX_PATH="nixpkgs=${pkgs.path} nixos-config=/etc/nixos/configuration.nix"
+      
+      systemctl start auto-update-config.service
+      nice -n 19 ionice -c 3 nixos-rebuild boot --upgrade
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+    };
+
+    after = [ "network-online.target" "graphical.target" ];
+    wants = [ "network-online.target" ];
+  
+    wantedBy = [ "default.target" ];
   };
 }
