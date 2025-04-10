@@ -63,27 +63,28 @@ in
   systemd.services."auto-update-config" = {
     script = ''
       set -eu
+      export PATH=${pkgs.git}/bin:${pkgs.nix}/bin:${pkgs.gnugrep}/bin:${pkgs.gawk}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin:${pkgs.flatpak}/bin:$PATH
 
       # Update nixbook configs
-      ${pkgs.git}/bin/git -C /etc/nixbook reset --hard
-      ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
-      ${pkgs.git}/bin/git -C /etc/nixbook pull --rebase
+      git -C /etc/nixbook reset --hard
+      git -C /etc/nixbook clean -fd
+      git -C /etc/nixbook pull --rebase
 
-      currentChannel=$(${pkgs.nix}/bin/nix-channel --list | ${pkgs.gnugrep}/bin/grep '^nixos' | ${pkgs.gawk}/bin/awk '{print $2}')
+      currentChannel=$(nix-channel --list | grep '^nixos' | awk '{print $2}')
       targetChannel="${nixChannel}"
 
       echo "Current Channel is: $currentChannel"
 
       if [ "$currentChannel" != "$targetChannel" ]; then
         echo "Updating Nix channel to $targetChannel"
-        ${pkgs.nix}/bin/nix-channel --add "$targetChannel" nixos
-        ${pkgs.nix}/bin/nix-channel --update
+        nix-channel --add "$targetChannel" nixos
+        nix-channel --update
       else
         echo "Nix channel is already set to $targetChannel"
       fi
       
       # Flatpak Updates
-      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
+      nice -n 19 ionice -c 3 flatpak update --noninteractive --assumeyes
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -109,11 +110,11 @@ in
   systemd.services."auto-upgrade" = {
     script = ''
       set -eu
-      export PATH=${pkgs.nixos-rebuild}/bin:${pkgs.nix}/bin:${pkgs.systemd}/bin:$PATH
+      export PATH=${pkgs.nixos-rebuild}/bin:${pkgs.nix}/bin:${pkgs.systemd}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin:$PATH
       export NIX_PATH="nixpkgs=${pkgs.path} nixos-config=/etc/nixos/configuration.nix"
       
       systemctl start auto-update-config.service
-      nixos-rebuild boot --upgrade
+      nice -n 19 ionice -c 3 nixos-rebuild boot --upgrade
     '';
     serviceConfig = {
       Type = "oneshot";
