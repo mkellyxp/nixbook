@@ -110,11 +110,14 @@ in
   systemd.services."auto-upgrade" = {
     script = ''
       set -eu
-      export PATH=${pkgs.nixos-rebuild}/bin:${pkgs.nix}/bin:${pkgs.systemd}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin:$PATH
+      export PATH=${pkgs.nixos-rebuild}/bin:${pkgs.nix}/bin:${pkgs.systemd}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin:${pkgs.flatpak}/bin:$PATH
       export NIX_PATH="nixpkgs=${pkgs.path} nixos-config=/etc/nixos/configuration.nix"
       
       systemctl start auto-update-config.service
       nice -n 19 ionice -c 3 nixos-rebuild boot --upgrade
+
+      # Fix for zoom flatpak
+      flatpak override --env=ZYPAK_ZYGOTE_STRATEGY_SPAWN=0 us.zoom.Zoom
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -127,3 +130,8 @@ in
     wantedBy = [ "default.target" ];
   };
 }
+
+# Notes
+#
+# To reverse zoom flatpak fix:
+#   flatpak override --unset-env=ZYPAK_ZYGOTE_STRATEGY_SPAWN us.zoom.Zoom
