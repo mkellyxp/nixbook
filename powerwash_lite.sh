@@ -4,12 +4,9 @@ read -p "Do you want to continue? (y/n): " answer
 
 if [[ "$answer" =~ ^[Yy]$ ]]; then
 echo "Powerwashing NixBook Lite..."
-  # Get latest nixbook code
-  sudo git -C /etc/nixbook reset --hard
-  sudo git -C /etc/nixbook clean -fd
-  sudo git -C /etc/nixbook pull --rebase
-  
 
+  sudo systemctl start auto-update-config.service;
+  
   # Erase data and set up home directory again
   rm -rf ~/
   mkdir ~/Desktop

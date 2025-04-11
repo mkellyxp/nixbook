@@ -3,12 +3,9 @@ read -p "Do you want to continue? (y/n): " answer
 
 if [[ "$answer" =~ ^[Yy]$ ]]; then
 echo "Powerwashing NixBook..."
-  # Get latest nixbook code
-  sudo git -C /etc/nixbook reset --hard
-  sudo git -C /etc/nixbook clean -fd
-  sudo git -C /etc/nixbook pull --rebase
-  
 
+  sudo systemctl start auto-update-config.service;
+  
   # Erase data and set up home directory again
   rm -rf ~/
   mkdir ~/Desktop
@@ -33,6 +30,9 @@ echo "Powerwashing NixBook..."
   flatpak install flathub com.google.Chrome -y
   flatpak install flathub us.zoom.Zoom -y
   flatpak install flathub org.libreoffice.LibreOffice -y
+  
+  # Fix for zoom flatpak
+  flatpak override --env=ZYPAK_ZYGOTE_STRATEGY_SPAWN=0 us.zoom.Zoom
   
   reboot
 else
