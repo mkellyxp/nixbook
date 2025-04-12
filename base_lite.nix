@@ -39,8 +39,8 @@ in
   systemd.timers."auto-update-config" = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnBootSec = "5m";
       OnCalendar = "daily";
+      Persistent = true;
       Unit = "auto-update-config.service";
     };
   };
@@ -74,16 +74,14 @@ in
     };
     after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
-  
-    wantedBy = [ "default.target" ];
   };
 
   # Auto Upgrade NixOS
   systemd.timers."auto-upgrade" = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnBootSec = "10m";
       OnCalendar = "weekly";
+      Persistent = true;
       Unit = "auto-upgrade.service";
     };
   };
@@ -104,8 +102,6 @@ in
 
     after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
-  
-    wantedBy = [ "default.target" ];
   };
   
 }
