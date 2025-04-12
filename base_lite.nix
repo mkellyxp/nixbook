@@ -39,7 +39,6 @@ in
   systemd.timers."auto-update-config" = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnBootSec = "5m";
       OnCalendar = "daily";
       Persistent = true;
       Unit = "auto-update-config.service";
@@ -81,7 +80,6 @@ in
   systemd.timers."auto-upgrade" = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnBootSec = "10m";
       OnCalendar = "weekly";
       Persistent = true;
       Unit = "auto-upgrade.service";
