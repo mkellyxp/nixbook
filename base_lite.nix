@@ -9,6 +9,8 @@ in
     DefaultTimeoutStopSec=10s
   '';
 
+  systemd.services."NetworkManager-wait-online".enable = true;
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
@@ -46,9 +48,17 @@ in
   };
 
   systemd.services."auto-update-config" = {
+    path = with pkgs; [
+      git
+      nix
+      gnugrep
+      gawk
+      util-linux
+      coreutils-full
+    ];
+  
     script = ''
       set -eu
-      export PATH=${pkgs.git}/bin:${pkgs.nix}/bin:${pkgs.gnugrep}/bin:${pkgs.gawk}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin::$PATH
 
       # Update nixbook configs
       git -C /etc/nixbook reset --hard
@@ -87,9 +97,16 @@ in
   };
 
   systemd.services."auto-upgrade" = {
+    path = with pkgs; [
+      nixos-rebuild
+      nix
+      systemd
+      util-linux
+      coreutils-full
+    ];
+  
     script = ''
       set -eu
-      export PATH=${pkgs.nixos-rebuild}/bin:${pkgs.nix}/bin:${pkgs.systemd}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin:$PATH
       export NIX_PATH="nixpkgs=${pkgs.path} nixos-config=/etc/nixos/configuration.nix"
       
       systemctl start auto-update-config.service
