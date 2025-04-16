@@ -81,6 +81,8 @@ in
     serviceConfig = {
       Type = "oneshot";
       User = "root";
+      Restart = "on-failure";
+      RestartSec = "30s";
     };
     after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
@@ -115,6 +117,8 @@ in
     serviceConfig = {
       Type = "oneshot";
       User = "root";
+      Restart = "on-failure";
+      RestartSec = "30s";
     };
 
     after = [ "network-online.target" "graphical.target" ];
