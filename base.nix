@@ -148,6 +148,53 @@ in
     after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
   };
+
+  # Notify Test
+  systemd.timers."notify-test" = {
+  wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "*:*";
+      Persistent = true;
+      Unit = "notify-test.service";
+    };
+  };
+
+  systemd.services."notify-test" = {
+    path = with pkgs; [
+      nixos-rebuild
+      nix
+      systemd
+      util-linux
+      coreutils-full
+      flatpak
+    ];
+  
+    script = ''
+      set -eu
+
+      users=$(loginctl list-sessions --no-legend | ${pkgs.gawk}/bin/awk '{print $1}' | while read session; do
+        loginctl show-session "$session" -p Name | cut -d'=' -f2
+      done | sort -u)
+
+      for user in $users; do
+        ${pkgs.sudo}/bin/sudo -u "$user" "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u "$user")/bus" ${pkgs.libnotify}/bin/notify-send "System has not been updated recently" "Please reboot when you can!"
+      done
+    '';
+    
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+      Restart = "on-failure";
+      RestartSec = "30s";
+    };
+
+    after = [ "network-online.target" "graphical.target" ];
+    wants = [ "network-online.target" ];
+  };
+
+
+
+  
 }
 
 # Notes
