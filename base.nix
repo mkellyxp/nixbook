@@ -71,7 +71,7 @@ in
   systemd.timers."auto-update-config" = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnCalendar = "daily";
+      OnCalendar = "Tue..Sun";
       Persistent = true;
       Unit = "auto-update-config.service";
     };
@@ -128,7 +128,7 @@ in
   systemd.timers."auto-upgrade" = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnCalendar = "weekly";
+      OnCalendar = "Mon";
       Persistent = true;
       Unit = "auto-upgrade.service";
     };
