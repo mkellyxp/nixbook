@@ -1,14 +1,29 @@
 { config, pkgs, ... }:
 let
   nixChannel = "https://nixos.org/channels/nixos-24.11"; 
+
+  notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
+    set -eu
+
+    title="$1"
+    body="$2"
+
+    users=$(loginctl list-sessions --no-legend | ${pkgs.gawk}/bin/awk '{print $1}' | while read session; do
+      loginctl show-session "$session" -p Name | cut -d'=' -f2
+    done | sort -u)
+
+    for user in $users; do
+      ${pkgs.sudo}/bin/sudo -u "$user" \
+        DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u "$user")/bus" \
+        ${pkgs.libnotify}/bin/notify-send "$title" "$body"
+    done
+  '';
 in
 {
   zramSwap.enable = true;
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=10s
   '';
-
-  systemd.services."NetworkManager-wait-online".enable = true;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -76,6 +91,10 @@ in
     script = ''
       set -eu
 
+      echo "Starting Auto Update Config"
+
+      ${notifyUsersScript} "Start Config Updates" "Starting config updates"
+
       # Update nixbook configs
       git -C /etc/nixbook reset --hard
       git -C /etc/nixbook clean -fd
@@ -84,18 +103,15 @@ in
       currentChannel=$(nix-channel --list | grep '^nixos' | awk '{print $2}')
       targetChannel="${nixChannel}"
 
-      echo "Current Channel is: $currentChannel"
-
       if [ "$currentChannel" != "$targetChannel" ]; then
-        echo "Updating Nix channel to $targetChannel"
         nix-channel --add "$targetChannel" nixos
         nix-channel --update
-      else
-        echo "Nix channel is already set to $targetChannel"
       fi
       
       # Flatpak Updates
       nice -n 19 ionice -c 3 flatpak update --noninteractive --assumeyes
+
+      ${notifyUsersScript} "Config Update Complete" "You're good to go"
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -131,12 +147,16 @@ in
     script = ''
       set -eu
       export NIX_PATH="nixpkgs=${pkgs.path} nixos-config=/etc/nixos/configuration.nix"
+
+      ${notifyUsersScript} "Starting System Updates" "System updates are installing in the background.  You can continue to use your computer while these are running."
       
       systemctl start auto-update-config.service
       nice -n 19 ionice -c 3 nixos-rebuild boot --upgrade
 
       # Fix for zoom flatpak
       flatpak override --env=ZYPAK_ZYGOTE_STRATEGY_SPAWN=0 us.zoom.Zoom
+
+      ${notifyUsersScript} "System Updates Complete" "Updates are complete!  Simply reboot the computer whenever is convenient to apply updates."
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -153,47 +173,12 @@ in
   systemd.timers."notify-test" = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnCalendar = "*:*";
+      # OnCalendar = "*:*";
+      OnCalendar = "daily";
       Persistent = true;
       Unit = "notify-test.service";
     };
   };
-
-  systemd.services."notify-test" = {
-    path = with pkgs; [
-      nixos-rebuild
-      nix
-      systemd
-      util-linux
-      coreutils-full
-      flatpak
-    ];
-  
-    script = ''
-      set -eu
-
-      users=$(loginctl list-sessions --no-legend | ${pkgs.gawk}/bin/awk '{print $1}' | while read session; do
-        loginctl show-session "$session" -p Name | cut -d'=' -f2
-      done | sort -u)
-
-      for user in $users; do
-        ${pkgs.sudo}/bin/sudo -u "$user" "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u "$user")/bus" ${pkgs.libnotify}/bin/notify-send "System has not been updated recently" "Please reboot when you can!"
-      done
-    '';
-    
-    serviceConfig = {
-      Type = "oneshot";
-      User = "root";
-      Restart = "on-failure";
-      RestartSec = "30s";
-    };
-
-    after = [ "network-online.target" "graphical.target" ];
-    wants = [ "network-online.target" ];
-  };
-
-
-
   
 }
 
