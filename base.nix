@@ -6,12 +6,10 @@ let
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
     set -eu
 
-    export PATH="${pkgs.git}/bin:${pkgs.nix}/bin:${pkgs.gnugrep}/bin:${pkgs.gawk}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin:${pkgs.flatpak}/bin:${pkgs.sudo}/bin:${pkgs.libnotify}/bin:$PATH"
-
     title="$1"
     body="$2"
 
-    users=$(loginctl list-sessions --no-legend | awk '{print $1}' | while read session; do
+    users=$(${pkgs.systemd}/bin/loginctl list-sessions --no-legend | ${pkgs.gawk}/bin/awk '{print $1}' | while read session; do
       loginctl show-session "$session" -p Name | cut -d'=' -f2
     done | sort -u)
 
@@ -25,20 +23,18 @@ let
   ## Update Git and Channel Script
   updateGitScript = pkgs.writeScript "update-git.sh" ''
     set -eu
-
-    export PATH="${pkgs.git}/bin:${pkgs.nix}/bin:${pkgs.nixos-rebuild}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin:${pkgs.flatpak}/bin:$PATH"
     
     # Update nixbook configs
-    git -C /etc/nixbook reset --hard
-    git -C /etc/nixbook clean -fd
-    git -C /etc/nixbook pull --rebase
+    ${pkgs.git}/bin/git -C /etc/nixbook reset --hard
+    ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
+    ${pkgs.git}/bin/git -C /etc/nixbook pull --rebase
 
-    currentChannel=$(nix-channel --list | grep '^nixos' | awk '{print $2}')
+    currentChannel=$(${pkgs.nix}/bin/nix-channel --list | ${pkgs.gnugrep}/bin/grep '^nixos' | ${pkgs.gawk}/bin/awk '{print $2}')
     targetChannel="${nixChannel}"
 
     if [ "$currentChannel" != "$targetChannel" ]; then
-      nix-channel --add "$targetChannel" nixos
-      nix-channel --update
+      ${pkgs.nix}/bin/nix-channel --add "$targetChannel" nixos
+      ${pkgs.nix}/bin/nix-channel --update
     fi
   '';
 in
@@ -101,23 +97,13 @@ in
   };
 
   systemd.services."auto-update-config" = {
-    path = with pkgs; [
-      git
-      nix
-      gnugrep
-      gawk
-      util-linux
-      coreutils-full
-      flatpak
-    ];
-
     script = ''
       set -eu
 
       ${updateGitScript}
 
       # Flatpak Updates
-      nice -n 19 ionice -c 3 flatpak update --noninteractive --assumeyes
+      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -141,28 +127,19 @@ in
   };
 
   systemd.services."auto-upgrade" = {
-    path = with pkgs; [
-      git
-      nixos-rebuild
-      nix
-      systemd
-      util-linux
-      coreutils-full
-      flatpak
-    ];
-  
     script = ''
       set -eu
+      export PATH=${pkgs.nixos-rebuild}/bin:${pkgs.nix}/bin:${pkgs.systemd}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin:$PATH
       export NIX_PATH="nixpkgs=${pkgs.path} nixos-config=/etc/nixos/configuration.nix"
 
       ${updateGitScript}
 
       ${notifyUsersScript} "Starting System Updates" "System updates are installing in the background.  You can continue to use your computer while these are running."
             
-      nice -n 19 ionice -c 3 nixos-rebuild boot --upgrade
+      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.nixos-rebuild}/bin/nixos-rebuild boot --upgrade
 
       # Fix for zoom flatpak
-      flatpak override --env=ZYPAK_ZYGOTE_STRATEGY_SPAWN=0 us.zoom.Zoom
+      ${pkgs.flatpak}/bin/flatpak override --env=ZYPAK_ZYGOTE_STRATEGY_SPAWN=0 us.zoom.Zoom
 
       ${notifyUsersScript} "System Updates Complete" "Updates are complete!  Simply reboot the computer whenever is convenient to apply updates."
     '';
