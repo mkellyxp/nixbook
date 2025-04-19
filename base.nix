@@ -153,17 +153,6 @@ in
     after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
   };
-
-  # Notify Test
-  systemd.timers."notify-test" = {
-  wantedBy = [ "timers.target" ];
-    timerConfig = {
-      # OnCalendar = "*:*";
-      OnCalendar = "daily";
-      Persistent = true;
-      Unit = "notify-test.service";
-    };
-  };
   
 }
 
