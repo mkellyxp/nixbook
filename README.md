@@ -48,33 +48,25 @@ The **nixbook lite** version:
 nmtui
 ```
 
-
-## Step 5:  Go to /etc and nix-shell git
+## Step 5:  Clone the nixbook repo 
 ```
-cd /etc/
-nix-shell -p git
+sudo nix-shell -p git --run "git clone https://github.com/mkellyxp/nixbook"
 ```
 
-
-## Step 6:  Clone the nixbook repo  (make sure you run as sudo and you're in /etc!)
+## Step 6:  Run the install script (run this with NO sudo)
 ```
-sudo git clone https://github.com/mkellyxp/nixbook
-```
-
-## Step 7:  Run the install script (run this with NO sudo)
-```
-cd nixbook
+cd /etc/nixbook
 ./install.sh
 ```
 
 *or for nixbook lite*
 ```
-cd nixbook
+cd /etc/nixbook
 ./install_lite.sh
 ```
 
 
-## Step 8:  Enjoy nixbook!
+## Step 7:  Enjoy nixbook!
 
 You can always manually run updates by running **Update and Reboot** in the menu.
 
