@@ -102,7 +102,6 @@ in
       CPUWeight = "1";
       CPUQuota = "85%";
       IOWeight = "1";
-      TasksMax = "2";
       MemoryHigh = "100M";
     };
 
@@ -142,7 +141,6 @@ in
       CPUWeight = "1";
       CPUQuota = "85%";
       IOWeight = "1";
-      TasksMax = "2";
       MemoryHigh = "100M";
     };
 
