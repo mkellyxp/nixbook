@@ -99,9 +99,11 @@ in
       User = "root";
       Restart = "on-failure";
       RestartSec = "30s";
-      CPUWeight = "20";
+      CPUWeight = "1";
       CPUQuota = "85%";
-      IOWeight = "20";
+      IOWeight = "1";
+      TasksMax = "1";
+      MemoryHigh = "100M";
     };
 
     after = [ "network-online.target" "graphical.target" ];
@@ -137,9 +139,11 @@ in
       User = "root";
       Restart = "on-failure";
       RestartSec = "30s";
-      CPUWeight = "20";
+      CPUWeight = "1";
       CPUQuota = "85%";
-      IOWeight = "20";
+      IOWeight = "1";
+      TasksMax = "1";
+      MemoryHigh = "100M";
     };
 
     after = [ "network-online.target" "graphical.target" ];
