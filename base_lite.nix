@@ -99,6 +99,9 @@ in
       User = "root";
       Restart = "on-failure";
       RestartSec = "30s";
+      CPUWeight=20
+      CPUQuota=85%
+      IOWeight=20
     };
 
     after = [ "network-online.target" "graphical.target" ];
@@ -125,7 +128,7 @@ in
 
       ${notifyUsersScript} "Starting System Updates" "System updates are installing in the background.  You can continue to use your computer while these are running."
             
-      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.nixos-rebuild}/bin/nixos-rebuild boot --upgrade
+      ${pkgs.nixos-rebuild}/bin/nixos-rebuild boot --upgrade
 
       ${notifyUsersScript} "System Updates Complete" "Updates are complete!  Simply reboot the computer whenever is convenient to apply updates."
     '';
@@ -134,6 +137,9 @@ in
       User = "root";
       Restart = "on-failure";
       RestartSec = "30s";
+      CPUWeight=20
+      CPUQuota=85%
+      IOWeight=20
     };
 
     after = [ "network-online.target" "graphical.target" ];
