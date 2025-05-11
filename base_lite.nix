@@ -100,9 +100,8 @@ in
       Restart = "on-failure";
       RestartSec = "30s";
       CPUWeight = "1";
-      CPUQuota = "85%";
+      CPUQuota = "25%";
       IOWeight = "1";
-      MemoryHigh = "100M";
     };
 
     after = [ "network-online.target" "graphical.target" ];
@@ -139,9 +138,8 @@ in
       Restart = "on-failure";
       RestartSec = "30s";
       CPUWeight = "1";
-      CPUQuota = "85%";
+      CPUQuota = "25%";
       IOWeight = "1";
-      MemoryHigh = "100M";
     };
 
     after = [ "network-online.target" "graphical.target" ];
