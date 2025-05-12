@@ -40,6 +40,7 @@ let
 in
 {
   zramSwap.enable = true;
+  zramSwap.memoryPercent = 100;
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=10s
   '';
@@ -102,7 +103,6 @@ in
       CPUWeight = "20";
       CPUQuota = "25%";
       IOWeight = "20";
-      MemorySwapMax = "0";
     };
 
     after = [ "network-online.target" "graphical.target" ];
@@ -141,7 +141,6 @@ in
       CPUWeight = "20";
       CPUQuota = "25%";
       IOWeight = "20";
-      MemorySwapMax = "0";
     };
 
     after = [ "network-online.target" "graphical.target" ];
