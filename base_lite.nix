@@ -99,9 +99,9 @@ in
       User = "root";
       Restart = "on-failure";
       RestartSec = "30s";
-      CPUWeight = "1";
+      CPUWeight = "20";
       CPUQuota = "25%";
-      IOWeight = "1";
+      IOWeight = "20";
     };
 
     after = [ "network-online.target" "graphical.target" ];
