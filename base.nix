@@ -103,13 +103,16 @@ in
       ${updateGitScript}
 
       # Flatpak Updates
-      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
+      ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
     '';
     serviceConfig = {
       Type = "oneshot";
       User = "root";
       Restart = "on-failure";
       RestartSec = "30s";
+      CPUWeight = "20";
+      CPUQuota = "25%";
+      IOWeight = "20";
     };
 
     after = [ "network-online.target" "graphical.target" ];
@@ -136,7 +139,7 @@ in
 
       ${notifyUsersScript} "Starting System Updates" "System updates are installing in the background.  You can continue to use your computer while these are running."
             
-      ${pkgs.coreutils-full}/bin/nice -n 19 ${pkgs.util-linux}/bin/ionice -c 3 ${pkgs.nixos-rebuild}/bin/nixos-rebuild boot --upgrade
+      ${pkgs.nixos-rebuild}/bin/nixos-rebuild boot --upgrade
 
       # Fix for zoom flatpak
       ${pkgs.flatpak}/bin/flatpak override --env=ZYPAK_ZYGOTE_STRATEGY_SPAWN=0 us.zoom.Zoom
@@ -148,6 +151,9 @@ in
       User = "root";
       Restart = "on-failure";
       RestartSec = "30s";
+      CPUWeight = "20";
+      CPUQuota = "25%";
+      IOWeight = "20";
     };
 
     after = [ "network-online.target" "graphical.target" ];
