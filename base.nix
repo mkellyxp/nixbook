@@ -111,7 +111,6 @@ in
       Restart = "on-failure";
       RestartSec = "30s";
       CPUWeight = "20";
-#      CPUQuota = "25%";
       IOWeight = "20";
     };
 
@@ -152,7 +151,6 @@ in
       Restart = "on-failure";
       RestartSec = "30s";
       CPUWeight = "20";
-#      CPUQuota = "25%";
       IOWeight = "20";
     };
 
