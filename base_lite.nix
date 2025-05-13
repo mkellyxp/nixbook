@@ -40,7 +40,7 @@ let
 in
 {
   zramSwap.enable = true;
-  zramSwap.memoryPercent = 95;
+  zramSwap.memoryPercent = 100;
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=10s
   '';
