@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  nixChannel = "https://nixos.org/channels/nixos-24.11"; 
+  nixChannel = "https://nixos.org/channels/nixos-25.05"; 
 
   ## Notify Users Script
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
