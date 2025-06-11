@@ -141,6 +141,10 @@ in
       # Fix for zoom flatpak
       ${pkgs.flatpak}/bin/flatpak override --env=ZYPAK_ZYGOTE_STRATEGY_SPAWN=0 us.zoom.Zoom
 
+      # Fix for gnome updates notification nagging
+      ${pkgs.dconf}/bin/dconf write /org/gnome/software/download-updates false
+      ${pkgs.dconf}/bin/dconf write /org/gnome/software/download-updates-notify false
+
       ${notifyUsersScript} "System Updates Complete" "Updates are complete!  Simply reboot the computer whenever is convenient to apply updates."
     '';
     serviceConfig = {
