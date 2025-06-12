@@ -14,10 +14,25 @@ let
     done | sort -u)
 
     for user in $users; do
+      [ -n "$user" ] || continue
+      uid=$(id -u "$user") || continue
+      [ -S "/run/user/$uid/bus" ] || continue
+
+      # Send notification
       ${pkgs.sudo}/bin/sudo -u "$user" \
-        DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u "$user")/bus" \
-        ${pkgs.libnotify}/bin/notify-send "$title" "$body"
+        DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus" \
+        ${pkgs.libnotify}/bin/notify-send "$title" "$body" || true
+
+      # Fix for gnome software nagging user
+      ${pkgs.sudo}/bin/sudo -u "$user" \
+        DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus" \
+        ${pkgs.dconf}/bin/dconf write /org/gnome/software/download-updates false || true
+
+      ${pkgs.sudo}/bin/sudo -u "$user" \
+        DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus" \
+        ${pkgs.dconf}/bin/dconf write /org/gnome/software/download-updates-notify false || true
     done
+
   '';
 
   ## Update Git and Channel Script
@@ -67,6 +82,7 @@ in
     gawk
     gnugrep
     sudo
+    dconf
     gnome-software
     gnome-calculator
     gnome-calendar
@@ -140,10 +156,6 @@ in
 
       # Fix for zoom flatpak
       ${pkgs.flatpak}/bin/flatpak override --env=ZYPAK_ZYGOTE_STRATEGY_SPAWN=0 us.zoom.Zoom
-
-      # Fix for gnome updates notification nagging
-      ${pkgs.dconf}/bin/dconf write /org/gnome/software/download-updates false
-      ${pkgs.dconf}/bin/dconf write /org/gnome/software/download-updates-notify false
 
       ${notifyUsersScript} "System Updates Complete" "Updates are complete!  Simply reboot the computer whenever is convenient to apply updates."
     '';
