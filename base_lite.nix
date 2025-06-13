@@ -31,6 +31,10 @@ let
       ${pkgs.sudo}/bin/sudo -u "$user" \
         DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus" \
         ${pkgs.dconf}/bin/dconf write /org/gnome/software/download-updates-notify false || true
+
+      ${pkgs.sudo}/bin/sudo -u "$user" \
+        DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus" \
+        ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/notifications/application/org-gnome-software/enable false || true
     done
 
   '';
