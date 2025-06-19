@@ -26,11 +26,8 @@ let
       # Fix for gnome software nagging user
       ${pkgs.sudo}/bin/sudo -u "$user" \
         DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus" \
-        ${pkgs.dconf}/bin/dconf write /org/gnome/software/download-updates false || true
+        ${pkgs.dconf}/bin/dconf write /org/gnome/software/flatpak-updates false || true
 
-      ${pkgs.sudo}/bin/sudo -u "$user" \
-        DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus" \
-        ${pkgs.dconf}/bin/dconf write /org/gnome/software/download-updates-notify false || true
     done
 
   '';
