@@ -89,6 +89,15 @@ in
     xdg-desktop-portal-gtk
     xdg-desktop-portal-gnome
     system-config-printer
+
+    (makeDesktopItem {
+      name = "zoommtg-handler";
+      desktopName = "Zoom URI Handler";
+      exec = "gtk-launch us.zoom.Zoom %u";
+      mimeTypes = [ "x-scheme-handler/zoommtg" ];
+      noDisplay = true;
+      type = "Application";
+    })
   ];
 
   services.flatpak.enable = true;
