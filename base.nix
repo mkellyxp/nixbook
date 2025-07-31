@@ -49,6 +49,16 @@ let
       ${pkgs.nix}/bin/nix-channel --update
     fi
   '';
+
+  ## Install Flatpak Apps Script
+  installFlatpakAppsScript = pkgs.writeScript "install-flatpak-apps.sh" ''
+    set -eu
+
+    # Install Flatpak applications
+    ${pkgs.flatpak}/bin/flatpak install flathub com.google.Chrome -y
+    ${pkgs.flatpak}/bin/flatpak install flathub us.zoom.Zoom -y
+    ${pkgs.flatpak}/bin/flatpak install flathub org.libreoffice.LibreOffice -y
+  '';
 in
 {
   zramSwap.enable = true;
@@ -101,6 +111,24 @@ in
   ];
 
   services.flatpak.enable = true;
+
+  # Install Flatpak Applications Service
+  systemd.services."install-flatpak-apps" = {
+    script = ''
+      set -eu
+      ${installFlatpakAppsScript}
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+      Restart = "on-failure";
+      RestartSec = "30s";
+    };
+
+    after = [ "network-online.target" "flatpak-system-helper.service" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+  };
 
   nix.gc = {
     automatic = true;
