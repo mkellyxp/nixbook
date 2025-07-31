@@ -8,7 +8,7 @@ The goal is to create a "chromebook like" unbreakable computer to give to basic 
 **NEW INSTALLER AVAILABLE**
 With the help of amazing people in the community, Nixbook now has an official installer in testing.  Download this ISO, flash it to a USB and you can skip ALL of the steps below!  Please let me know if you have any issues with the installer.
 
-Click [here](https://membervault.s3.us-west-2.amazonaws.com/nixbook/nixbook-installer-25.05.20250726.iso){:target="_blank"} 
+Click [here](https://membervault.s3.us-west-2.amazonaws.com/nixbook/nixbook-installer-25.05.20250726.iso)
 
 
 
