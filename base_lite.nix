@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  nixChannel = "https://nixos.org/channels/nixos-24.11"; 
+  nixChannel = "https://nixos.org/channels/nixos-25.05"; 
 
   ## Notify Users Script
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
@@ -14,10 +14,17 @@ let
     done | sort -u)
 
     for user in $users; do
+      [ -n "$user" ] || continue
+      uid=$(id -u "$user") || continue
+      [ -S "/run/user/$uid/bus" ] || continue
+
+      # Send notification
       ${pkgs.sudo}/bin/sudo -u "$user" \
-        DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u "$user")/bus" \
-        ${pkgs.libnotify}/bin/notify-send "$title" "$body"
+        DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus" \
+        ${pkgs.libnotify}/bin/notify-send "$title" "$body" || true
+
     done
+
   '';
 
   ## Update Git and Channel Script
@@ -123,7 +130,7 @@ in
     script = ''
       set -eu
       export PATH=${pkgs.nixos-rebuild}/bin:${pkgs.nix}/bin:${pkgs.systemd}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin:$PATH
-      export NIX_PATH="nixpkgs=${pkgs.path} nixos-config=/etc/nixos/configuration.nix"
+      export NIX_PATH="nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos nixos-config=/etc/nixos/configuration.nix"
 
       ${updateGitScript}
 

@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  nixChannel = "https://nixos.org/channels/nixos-24.11"; 
+  nixChannel = "https://nixos.org/channels/nixos-25.05"; 
 
   ## Notify Users Script
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
@@ -14,10 +14,22 @@ let
     done | sort -u)
 
     for user in $users; do
+      [ -n "$user" ] || continue
+      uid=$(id -u "$user") || continue
+      [ -S "/run/user/$uid/bus" ] || continue
+
+      # Send notification
       ${pkgs.sudo}/bin/sudo -u "$user" \
-        DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u "$user")/bus" \
-        ${pkgs.libnotify}/bin/notify-send "$title" "$body"
+        DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus" \
+        ${pkgs.libnotify}/bin/notify-send "$title" "$body" || true
+
+      # Fix for gnome software nagging user
+      ${pkgs.sudo}/bin/sudo -u "$user" \
+        DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus" \
+        ${pkgs.dconf}/bin/dconf write /org/gnome/software/flatpak-updates false || true
+
     done
+
   '';
 
   ## Update Git and Channel Script
@@ -36,6 +48,16 @@ let
       ${pkgs.nix}/bin/nix-channel --add "$targetChannel" nixos
       ${pkgs.nix}/bin/nix-channel --update
     fi
+  '';
+
+  ## Install Flatpak Apps Script
+  installFlatpakAppsScript = pkgs.writeScript "install-flatpak-apps.sh" ''
+    set -eu
+
+    # Install Flatpak applications
+    ${pkgs.flatpak}/bin/flatpak install flathub com.google.Chrome -y
+    ${pkgs.flatpak}/bin/flatpak install flathub us.zoom.Zoom -y
+    ${pkgs.flatpak}/bin/flatpak install flathub org.libreoffice.LibreOffice -y
   '';
 in
 {
@@ -67,6 +89,7 @@ in
     gawk
     gnugrep
     sudo
+    dconf
     gnome-software
     gnome-calculator
     gnome-calendar
@@ -76,9 +99,36 @@ in
     xdg-desktop-portal-gtk
     xdg-desktop-portal-gnome
     system-config-printer
+
+    (makeDesktopItem {
+      name = "zoommtg-handler";
+      desktopName = "Zoom URI Handler";
+      exec = "gtk-launch us.zoom.Zoom %u";
+      mimeTypes = [ "x-scheme-handler/zoommtg" ];
+      noDisplay = true;
+      type = "Application";
+    })
   ];
 
   services.flatpak.enable = true;
+
+  # Install Flatpak Applications Service
+  systemd.services."install-flatpak-apps" = {
+    script = ''
+      set -eu
+      ${installFlatpakAppsScript}
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+      Restart = "on-failure";
+      RestartSec = "30s";
+    };
+
+    after = [ "network-online.target" "flatpak-system-helper.service" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+  };
 
   nix.gc = {
     automatic = true;
@@ -132,7 +182,7 @@ in
     script = ''
       set -eu
       export PATH=${pkgs.nixos-rebuild}/bin:${pkgs.nix}/bin:${pkgs.systemd}/bin:${pkgs.util-linux}/bin:${pkgs.coreutils-full}/bin:$PATH
-      export NIX_PATH="nixpkgs=${pkgs.path} nixos-config=/etc/nixos/configuration.nix"
+      export NIX_PATH="nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos nixos-config=/etc/nixos/configuration.nix"
 
       ${updateGitScript}
 
