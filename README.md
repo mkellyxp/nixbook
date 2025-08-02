@@ -5,6 +5,14 @@
 The goal is to create a "chromebook like" unbreakable computer to give to basic users who know nothing about Linux and won't need to ever worry about updates / upgrades.
 
 ---
+**NEW INSTALLER AVAILABLE**
+With the help of amazing people in the community, Nixbook now has an official installer in testing.  Download this ISO, flash it to a USB and you can skip ALL of the steps below!  Please let me know if you have any issues with the installer.
+
+[Click here to download the ISO](https://s3.membervaultcdn.com/nixbook/nixbook-installer-25.05.20250726.iso)
+
+
+
+---
 Full video walk through of converting from Windows to Nixbook is now live here:
 
 <https://youtu.be/izvVjfqd5j8?si=ZJAdBZRsQO38YIy5>
