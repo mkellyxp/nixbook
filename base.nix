@@ -68,6 +68,7 @@ in
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
+  nixpkgs.config.allowUnfree = true;
 
   # Enable the Cinnamon Desktop Environment.
   services.xserver.displayManager.lightdm.enable = true;
