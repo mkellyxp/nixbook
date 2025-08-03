@@ -54,10 +54,32 @@ let
   installFlatpakAppsScript = pkgs.writeScript "install-flatpak-apps.sh" ''
     set -eu
 
-    # Install Flatpak applications
-    ${pkgs.flatpak}/bin/flatpak install flathub com.google.Chrome -y
-    ${pkgs.flatpak}/bin/flatpak install flathub us.zoom.Zoom -y
-    ${pkgs.flatpak}/bin/flatpak install flathub org.libreoffice.LibreOffice -y
+    if ${pkgs.flatpak}/bin/flatpak list --app | ${pkgs.gnugrep}/bin/grep -q "com.google.Chrome"; then
+      echo "Flatpaks already installed"
+    else
+      ${notifyUsersScript} "Installing Applications" "Chrome, Zoom and Libreoffice are being installed..."
+
+      # Install Flatpak applications
+      ${pkgs.flatpak}/bin/flatpak install flathub com.google.Chrome -y
+      ${pkgs.flatpak}/bin/flatpak install flathub us.zoom.Zoom -y
+      ${pkgs.flatpak}/bin/flatpak install flathub org.libreoffice.LibreOffice -y
+
+      users=$(${pkgs.systemd}/bin/loginctl list-sessions --no-legend | ${pkgs.gawk}/bin/awk '{print $1}' | while read session; do
+        loginctl show-session "$session" -p Name | cut -d'=' -f2
+      done | sort -u)
+
+      for user in $users; do
+        [ -n "$user" ] || continue
+        uid=$(id -u "$user") || continue
+        [ -S "/run/user/$uid/bus" ] || continue
+
+        cp /etc/nixbook/config/flatpak_links/* /home/$user/Desktop/
+        chown $user /home/$user/Desktop/*
+      
+        ${notifyUsersScript} "Installing Applications Complete" "Chrome, Zoom and Libreoffice have been installed and ready to use."
+      done
+    fi
+
   '';
 in
 {
