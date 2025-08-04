@@ -80,6 +80,8 @@ let
         chown $user /home/$user/Desktop/*
       
         ${notifyUsersScript} "Installing Applications Complete" "Chrome, Zoom and Libreoffice have been installed and ready to use."
+
+        ${pkgs.cinnamon-session}/bin/cinnamon-session-quit --logout --force
       done
     fi
 
@@ -152,7 +154,7 @@ in
       RestartSec = "30s";
     };
 
-    after = [ "network-online.target" "flatpak-system-helper.service" ];
+    after = [ "network-online.target" "flatpak-system-helper.service" "graphical.target" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
   };
