@@ -27,10 +27,7 @@ echo "Powerwashing NixBook..."
 
   # Add flathub and some apps
   sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    
-  # Fix for zoom flatpak
-  flatpak override --env=ZYPAK_ZYGOTE_STRATEGY_SPAWN=0 us.zoom.Zoom
-  
+      
   reboot
 else
   echo "Powerwashing Cancelled!"

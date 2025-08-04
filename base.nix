@@ -54,7 +54,7 @@ let
   installFlatpakAppsScript = pkgs.writeScript "install-flatpak-apps.sh" ''
     set -eu
 
-    if ${pkgs.flatpak}/bin/flatpak list --app | ${pkgs.gnugrep}/bin/grep -q "com.google.Chrome"; then
+    if ${pkgs.flatpak}/bin/flatpak list --app | ${pkgs.gnugrep}/bin/grep -q "org.libreoffice.LibreOffice"; then
       echo "Flatpaks already installed"
     else
       ${notifyUsersScript} "Installing Applications" "Chrome, Zoom and Libreoffice are being installed..."
@@ -63,6 +63,9 @@ let
       ${pkgs.flatpak}/bin/flatpak install flathub com.google.Chrome -y
       ${pkgs.flatpak}/bin/flatpak install flathub us.zoom.Zoom -y
       ${pkgs.flatpak}/bin/flatpak install flathub org.libreoffice.LibreOffice -y
+
+      # Fix for zoom flatpak
+      ${pkgs.flatpak}/bin/flatpak override --env=ZYPAK_ZYGOTE_STRATEGY_SPAWN=0 us.zoom.Zoom
 
       users=$(${pkgs.systemd}/bin/loginctl list-sessions --no-legend | ${pkgs.gawk}/bin/awk '{print $1}' | while read session; do
         loginctl show-session "$session" -p Name | cut -d'=' -f2
