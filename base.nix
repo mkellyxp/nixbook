@@ -91,6 +91,7 @@ in
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   nixpkgs.config.allowUnfree = true;
+  hardware.bluetooth.enable = true;
 
   # Enable the Cinnamon Desktop Environment.
   services.xserver.displayManager.lightdm.enable = true;
