@@ -57,11 +57,17 @@ let
     if ${pkgs.flatpak}/bin/flatpak list --app | ${pkgs.gnugrep}/bin/grep -q "org.libreoffice.LibreOffice"; then
       echo "Flatpaks already installed"
     else
-      ${notifyUsersScript} "Installing Applications" "Chrome, Zoom and Libreoffice are being installed..."
+
 
       # Install Flatpak applications
+      ${notifyUsersScript} "Installing Applications" "Chrome, Zoom and Libreoffice are being installed..."
+
       ${pkgs.flatpak}/bin/flatpak install flathub com.google.Chrome -y
+      ${notifyUsersScript} "Installing Applications" "Chrome, Zoom and Libreoffice are being installed..."
+      
       ${pkgs.flatpak}/bin/flatpak install flathub us.zoom.Zoom -y
+      ${notifyUsersScript} "Installing Applications" "Chrome, Zoom and Libreoffice are being installed..."
+
       ${pkgs.flatpak}/bin/flatpak install flathub org.libreoffice.LibreOffice -y
 
       # Fix for zoom flatpak
