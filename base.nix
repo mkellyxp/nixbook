@@ -84,14 +84,6 @@ let
 
         cp /etc/nixbook/config/flatpak_links/* /home/$user/Desktop/
         chown $user /home/$user/Desktop/*
-
-        user_bus="/run/user/$uid/bus"
-        if [ -S "$user_bus" ]; then
-          # Send cinnamon reexec in user's DBus session
-          ${pkgs.sudo}/bin/sudo -u "$user" DBUS_SESSION_BUS_ADDRESS="unix:path=$user_bus" \
-            ${pkgs.dbus}/bin/dbus-send --session --dest=org.Cinnamon --type=method_call \
-            /org/Cinnamon org.Cinnamon.Reexec
-        fi
       
         ${notifyUsersScript} "Installing Applications Complete" "Please Log out or restart to start using Nixbook and it's applications!"
       done
