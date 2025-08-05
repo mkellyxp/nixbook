@@ -152,7 +152,7 @@ in
       RestartSec = "30s";
     };
 
-    after = [ "network-online.target" "flatpak-system-helper.service" "graphical.target" ];
+    after = [ "network-online.target" "flatpak-system-helper.service" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
   };
