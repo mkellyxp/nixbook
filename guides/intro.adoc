@@ -1,0 +1,2 @@
+Welcome to your new {nixbook_name} Computer! These computers are loaded with an operating system that is lightweight, secure, self updating and forever free!
+While these computers are not running Windows, they look and operate the same way.

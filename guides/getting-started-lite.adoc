@@ -1,0 +1,38 @@
+:leveloffset: +1
+:nixbook_name: Nixbook Lite
+
+include::intro.adoc[]
+
+__However, this lite version of nixbook is only loaded with basic apps and the Firefox web browser to keep things as light as possible.__
+
+include::default-user.adoc[]
+
+include::updates.adoc[]
+
+= Here is how to use the basics of your new computer
+
+On the bottom right, you'll see the time, battery and where you will connect to the Internet.
+
+Pressing the windows button, or clicking the Start logo in the bottom left, will open up your "start menu" where you can find all your programs, install new ones, change settings, shutdown and restart.
+
+To add new software (apps), click on the icon with the blue circle with the white dots.
+From there you can search for and install almost anything you'll need. And these are all completely free to install and use.
+(if you don’t see your apps after you install, just reboot and they should be in your menu)
+
+Clicking in the gray icon with the switches will get you into settings. You can customize your
+system exactly how you want. To change the default user and/or password, click on Users and
+Groups.
+
+Also in settings, if the fonts are too small (or big), click on Font Selection and change the text scaling.
+
+== What about Microsoft office?
+
+If you need to use the official MS Office for some reason. Simply use office 365 in your chrome browser.
+
+== What about games?
+
+Nixbook Lite is usually installed on lower spec computers that aren’t very powerful nor have much hard drive space. Therefore, these are just not set up for gaming. Any game that runs in your browser should work. Or cloud gaming services like Xbox cloud.
+
+https://www.xbox.com/en-US/cloud-gaming
+
+include::end.adoc[]
