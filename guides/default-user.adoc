@@ -1,0 +1,1 @@
+**By default all computers have both username and password set to "user".** You can change this in settings later.
