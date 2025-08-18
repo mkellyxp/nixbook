@@ -122,5 +122,5 @@ sudo git pull --rebase
 Then you can start the autoupdate service again by running
 
 ```
-sudo systemctl status auto-update-config
+sudo systemctl restart auto-update-config
 ```
