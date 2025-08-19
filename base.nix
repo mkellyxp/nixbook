@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   nixChannel = "https://nixos.org/channels/nixos-25.05"; 
 
@@ -241,6 +241,12 @@ in
     after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
   };
+
+  # Fix for the pesky "insecure" broadcom
+  nixpkgs.config.allowInsecurePredicate = pkg:
+    builtins.elem (lib.getName pkg) [
+    "broadcom-sta" # aka “wl”
+  ];
   
 }
 
