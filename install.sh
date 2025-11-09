@@ -5,16 +5,23 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
   echo "Installing NixBook..."
 
   # Set up local files
-  rm -rf ~/
-  mkdir ~/Desktop
-  mkdir ~/Documents
-  mkdir ~/Downloads
-  mkdir ~/Pictures
+  source ~/.config/user-dirs.dirs
+  cp ~/.config/user-dirs.{dirs,locale} /tmp/
+  rm -rf ~/* && rm -rf ~/.*
+  mkdir $XDG_DESKTOP_DIR
+  mkdir $XDG_DOCUMENTS_DIR
+  mkdir $XDG_DOWNLOAD_DIR
+  mkdir $XDG_MUSIC_DIR
+  mkdir $XDG_PICTURES_DIR
+  mkdir $XDG_PUBLICSHARE_DIR
+  mkdir $XDG_TEMPLATES_DIR
+  mkdir $XDG_VIDEOS_DIR
   mkdir ~/.local
   mkdir ~/.local/share
-  cp -R /etc/nixbook/config/config ~/.config
-  cp /etc/nixbook/config/desktop/* ~/Desktop/
-  cp -R /etc/nixbook/config/applications ~/.local/share/applications
+  cp -R /etc/nixbook/config/config/* ~/.config
+  mv /tmp/user-dirs.{dirs,locale} ~/.config/
+  cp /etc/nixbook/config/desktop/* $XDG_DESKTOP_DIR/
+  cp -R /etc/nixbook/config/applications/* ~/.local/share/applications
 
   # The rest of the install should be hands off
   # Add Nixbook config and rebuild

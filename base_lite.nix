@@ -52,15 +52,8 @@ in
     DefaultTimeoutStopSec=10s
   '';
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  nixpkgs.config.allowUnfree = true;
+  # Enable Bluetooth
   hardware.bluetooth.enable = true;
-
-  # Enable the Cinnamon Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.cinnamon.enable = true;
-  xdg.portal.enable = true;
 
   # Enable Printing
   services.printing.enable = true;
