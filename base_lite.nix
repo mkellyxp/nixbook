@@ -44,6 +44,21 @@ let
       ${pkgs.nix}/bin/nix-channel --update
     fi
   '';
+
+  desktopChecks = [
+    (config.services.xserver.desktopManager.gnome.enable or false)
+    (config.services.xserver.desktopManager.plasma5.enable or false)
+    (config.services.xserver.desktopManager.plasma6.enable or false)
+    (config.services.xserver.desktopManager.xfce.enable or false)
+    (config.services.xserver.desktopManager.pantheon.enable or false)
+    (config.services.xserver.desktopManager.mate.enable or false)
+    (config.services.xserver.desktopManager.enlightenment.enable or false)
+    (config.services.xserver.desktopManager.lxqt.enable or false)
+    (config.services.xserver.desktopManager.lumina.enable or false)
+    (config.services.xserver.desktopManager.budgie.enable or false)
+    (config.services.xserver.desktopManager.deepin.enable or false)
+  ];
+  anyOtherDesktop = builtins.any (d: d) desktopChecks;
 in
 {
   zramSwap.enable = true;
@@ -51,6 +66,18 @@ in
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=10s
   '';
+
+  # Use default DE and configuration if no other DE is enabled.
+  lib.mkIf = anyOtherDesktop {
+    # Enable the X11 windowing system.
+    services.xserver.enable = true;
+    nixpkgs.config.allowUnfree = true;
+
+    # Enable the Cinnamon Desktop Environment.
+    services.xserver.displayManager.lightdm.enable = true;
+    services.xserver.desktopManager.cinnamon.enable = true;
+    xdg.portal.enable = true;
+  };
 
   # Enable Bluetooth
   hardware.bluetooth.enable = true;
