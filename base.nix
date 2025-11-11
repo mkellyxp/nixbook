@@ -83,8 +83,9 @@ let
         uid=$(id -u "$user") || continue
         [ -S "/run/user/$uid/bus" ] || continue
 
-        cp /etc/nixbook/config/flatpak_links/* /home/$user/Desktop/
-        chown $user /home/$user/Desktop/*
+        source /home/$user/.config/user-dirs.dirs
+        cp /etc/nixbook/config/flatpak_links/* $XDG_DESKTOP_DIR/
+        chown $user $XDG_DESKTOP_DIR/*
       
         ${notifyUsersScript} "Installing Applications Complete" "Please Log out or restart to start using Nixbook and it's applications!"
       done
