@@ -149,7 +149,7 @@ in
 
   # Enable automatic timezone (automatic-timezoned)
   services.automatic-timezoned.enable = true;
-
+  time.timeZone = null;
   services.flatpak.enable = true;
 
   # Install Flatpak Applications Service
