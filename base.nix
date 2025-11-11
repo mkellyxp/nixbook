@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  nixChannel = "https://nixos.org/channels/nixos-25.05"; 
+  nixChannel = "https://nixos.org/channels/nixos-25.05";
 
   ## Notify Users Script
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
@@ -35,7 +35,7 @@ let
   ## Update Git and Channel Script
   updateGitScript = pkgs.writeScript "update-git.sh" ''
     set -eu
-    
+
     # Update nixbook configs
     ${pkgs.git}/bin/git -C /etc/nixbook reset --hard
     ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
@@ -85,7 +85,7 @@ let
 
         cp /etc/nixbook/config/flatpak_links/* /home/$user/Desktop/
         chown $user /home/$user/Desktop/*
-      
+
         ${notifyUsersScript} "Installing Applications Complete" "Please Log out or restart to start using Nixbook and it's applications!"
       done
     fi
@@ -133,6 +133,8 @@ in
     xdg-desktop-portal-gtk
     xdg-desktop-portal-gnome
     system-config-printer
+    automatic-timezoned
+
 
     (makeDesktopItem {
       name = "zoommtg-handler";
@@ -143,6 +145,10 @@ in
       type = "Application";
     })
   ];
+
+
+  # Enable automatic timezone (automatic-timezoned)
+  services.automatic-timezoned.enable = true;
 
   services.flatpak.enable = true;
 
@@ -169,7 +175,7 @@ in
     dates = "Mon 3:40";
     options = "--delete-older-than 30d";
   };
-  
+
   # Auto update config, flatpak and channel
   systemd.timers."auto-update-config" = {
   wantedBy = [ "timers.target" ];
@@ -221,7 +227,7 @@ in
       ${updateGitScript}
 
       ${notifyUsersScript} "Starting System Updates" "System updates are installing in the background.  You can continue to use your computer while these are running."
-            
+
       ${pkgs.nixos-rebuild}/bin/nixos-rebuild boot --upgrade
 
       # Fix for zoom flatpak
@@ -247,7 +253,7 @@ in
     builtins.elem (lib.getName pkg) [
     "broadcom-sta" # aka “wl”
   ];
-  
+
 }
 
 # Notes

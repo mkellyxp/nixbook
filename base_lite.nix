@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  nixChannel = "https://nixos.org/channels/nixos-25.05"; 
+  nixChannel = "https://nixos.org/channels/nixos-25.05";
 
   ## Notify Users Script
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
@@ -30,7 +30,7 @@ let
   ## Update Git and Channel Script
   updateGitScript = pkgs.writeScript "update-git.sh" ''
     set -eu
-    
+
     # Update nixbook configs
     ${pkgs.git}/bin/git -C /etc/nixbook reset --hard
     ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
@@ -80,6 +80,7 @@ in
     gnome-calendar
     gnome-screenshot
     system-config-printer
+    automatic-timezoned
   ];
 
   nix.gc = {
@@ -87,7 +88,7 @@ in
     dates = "Mon 3:40";
     options = "--delete-older-than 14d";
   };
-  
+
   # Auto update config and channel
   systemd.timers."auto-update-config" = {
   wantedBy = [ "timers.target" ];
@@ -128,6 +129,9 @@ in
     };
   };
 
+  # Enable automatic timezone (automatic-timezoned)
+  services.automatic-timezoned.enable = true;
+
   systemd.services."auto-upgrade" = {
     script = ''
       set -eu
@@ -137,7 +141,7 @@ in
       ${updateGitScript}
 
       ${notifyUsersScript} "Starting System Updates" "System updates are installing in the background.  You can continue to use your computer while these are running."
-            
+
       ${pkgs.nixos-rebuild}/bin/nixos-rebuild boot --upgrade
 
       ${notifyUsersScript} "System Updates Complete" "Updates are complete!  Simply reboot the computer whenever is convenient to apply updates."
@@ -161,5 +165,5 @@ in
     builtins.elem (lib.getName pkg) [
     "broadcom-sta" # aka “wl”
   ];
-  
+
 }
