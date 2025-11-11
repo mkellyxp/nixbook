@@ -83,14 +83,30 @@ let
         uid=$(id -u "$user") || continue
         [ -S "/run/user/$uid/bus" ] || continue
 
-        cp /etc/nixbook/config/flatpak_links/* /home/$user/Desktop/
-        chown $user /home/$user/Desktop/*
+        source /home/$user/.config/user-dirs.dirs
+        cp /etc/nixbook/config/flatpak_links/* $XDG_DESKTOP_DIR/
+        chown $user $XDG_DESKTOP_DIR/*
       
         ${notifyUsersScript} "Installing Applications Complete" "Please Log out or restart to start using Nixbook and it's applications!"
       done
     fi
 
   '';
+
+  desktopChecks = [
+    (config.services.xserver.desktopManager.gnome.enable or false)
+    (config.services.xserver.desktopManager.plasma5.enable or false)
+    (config.services.xserver.desktopManager.plasma6.enable or false)
+    (config.services.xserver.desktopManager.xfce.enable or false)
+    (config.services.xserver.desktopManager.pantheon.enable or false)
+    (config.services.xserver.desktopManager.mate.enable or false)
+    (config.services.xserver.desktopManager.enlightenment.enable or false)
+    (config.services.xserver.desktopManager.lxqt.enable or false)
+    (config.services.xserver.desktopManager.lumina.enable or false)
+    (config.services.xserver.desktopManager.budgie.enable or false)
+    (config.services.xserver.desktopManager.deepin.enable or false)
+  ];
+  anyOtherDesktop = builtins.any (d: d) desktopChecks;
 in
 {
   zramSwap.enable = true;
@@ -98,15 +114,20 @@ in
     DefaultTimeoutStopSec=10s
   '';
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  nixpkgs.config.allowUnfree = true;
-  hardware.bluetooth.enable = true;
+  # Use default DE and configuration if no other DE is enabled.
+  lib.mkIf = anyOtherDesktop {
+    # Enable the X11 windowing system.
+    services.xserver.enable = true;
+    nixpkgs.config.allowUnfree = true;
 
-  # Enable the Cinnamon Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.cinnamon.enable = true;
-  xdg.portal.enable = true;
+    # Enable the Cinnamon Desktop Environment.
+    services.xserver.displayManager.lightdm.enable = true;
+    services.xserver.desktopManager.cinnamon.enable = true;
+    xdg.portal.enable = true;
+  };
+
+  # Enable Bluetooth
+  hardware.bluetooth.enable = true;
 
   # Enable Printing
   services.printing.enable = true;
@@ -247,7 +268,6 @@ in
     builtins.elem (lib.getName pkg) [
     "broadcom-sta" # aka “wl”
   ];
-  
 }
 
 # Notes
