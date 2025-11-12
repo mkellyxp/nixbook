@@ -1,6 +1,11 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  nixChannel = "https://nixos.org/channels/nixos-25.05"; 
+  nixChannel = "https://nixos.org/channels/nixos-25.05";
 
   ## Notify Users Script
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
@@ -30,7 +35,7 @@ let
   ## Update Git and Channel Script
   updateGitScript = pkgs.writeScript "update-git.sh" ''
     set -eu
-    
+
     # Update nixbook configs
     ${pkgs.git}/bin/git -C /etc/nixbook reset --hard
     ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
@@ -46,51 +51,25 @@ let
   '';
 in
 {
-  zramSwap.enable = true;
+  imports = [
+    ./common.nix
+    ./installed.nix
+  ];
+
   zramSwap.memoryPercent = 100;
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=10s
   '';
-
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  nixpkgs.config.allowUnfree = true;
-  hardware.bluetooth.enable = true;
-
-  # Enable the Cinnamon Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.cinnamon.enable = true;
-  xdg.portal.enable = true;
-
-  # Enable Printing
-  services.printing.enable = true;
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-  };
-
-  environment.systemPackages = with pkgs; [
-    git
-    firefox
-    libnotify
-    gawk
-    sudo
-    gnome-calculator
-    gnome-calendar
-    gnome-screenshot
-    system-config-printer
-  ];
 
   nix.gc = {
     automatic = true;
     dates = "Mon 3:40";
     options = "--delete-older-than 14d";
   };
-  
+
   # Auto update config and channel
   systemd.timers."auto-update-config" = {
-  wantedBy = [ "timers.target" ];
+    wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "Tue..Sun";
       Persistent = true;
@@ -114,13 +93,16 @@ in
       MemoryHigh = "500M";
     };
 
-    after = [ "network-online.target" "graphical.target" ];
+    after = [
+      "network-online.target"
+      "graphical.target"
+    ];
     wants = [ "network-online.target" ];
   };
 
   # Auto Upgrade NixOS
   systemd.timers."auto-upgrade" = {
-  wantedBy = [ "timers.target" ];
+    wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "Mon";
       Persistent = true;
@@ -152,14 +134,10 @@ in
       MemoryHigh = "500M";
     };
 
-    after = [ "network-online.target" "graphical.target" ];
+    after = [
+      "network-online.target"
+      "graphical.target"
+    ];
     wants = [ "network-online.target" ];
   };
-
-  # Fix for the pesky "insecure" broadcom
-  nixpkgs.config.allowInsecurePredicate = pkg:
-    builtins.elem (lib.getName pkg) [
-    "broadcom-sta" # aka “wl”
-  ];
-  
 }

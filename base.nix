@@ -1,6 +1,11 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  nixChannel = "https://nixos.org/channels/nixos-25.05"; 
+  nixChannel = "https://nixos.org/channels/nixos-25.05";
 
   ## Notify Users Script
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
@@ -35,7 +40,7 @@ let
   ## Update Git and Channel Script
   updateGitScript = pkgs.writeScript "update-git.sh" ''
     set -eu
-    
+
     # Update nixbook configs
     ${pkgs.git}/bin/git -C /etc/nixbook reset --hard
     ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
@@ -93,46 +98,24 @@ let
   '';
 in
 {
-  zramSwap.enable = true;
+  imports = [
+    ./common.nix
+    ./installed.nix
+  ];
+
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=10s
   '';
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  nixpkgs.config.allowUnfree = true;
-  hardware.bluetooth.enable = true;
-
-  # Enable the Cinnamon Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.cinnamon.enable = true;
   xdg.portal.enable = true;
-
-  # Enable Printing
-  services.printing.enable = true;
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-  };
-
   environment.systemPackages = with pkgs; [
-    git
-    firefox
-    libnotify
-    gawk
     gnugrep
-    sudo
     dconf
     gnome-software
-    gnome-calculator
-    gnome-calendar
-    gnome-screenshot
     flatpak
     xdg-desktop-portal
     xdg-desktop-portal-gtk
     xdg-desktop-portal-gnome
-    system-config-printer
 
     (makeDesktopItem {
       name = "zoommtg-handler";
@@ -159,7 +142,10 @@ in
       RestartSec = "30s";
     };
 
-    after = [ "network-online.target" "flatpak-system-helper.service" ];
+    after = [
+      "network-online.target"
+      "flatpak-system-helper.service"
+    ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
   };
@@ -169,10 +155,10 @@ in
     dates = "Mon 3:40";
     options = "--delete-older-than 30d";
   };
-  
+
   # Auto update config, flatpak and channel
   systemd.timers."auto-update-config" = {
-  wantedBy = [ "timers.target" ];
+    wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "Tue..Sun";
       Persistent = true;
@@ -198,13 +184,16 @@ in
       IOWeight = "20";
     };
 
-    after = [ "network-online.target" "graphical.target" ];
+    after = [
+      "network-online.target"
+      "graphical.target"
+    ];
     wants = [ "network-online.target" ];
   };
 
   # Auto Upgrade NixOS
   systemd.timers."auto-upgrade" = {
-  wantedBy = [ "timers.target" ];
+    wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "Mon";
       Persistent = true;
@@ -238,16 +227,12 @@ in
       IOWeight = "20";
     };
 
-    after = [ "network-online.target" "graphical.target" ];
+    after = [
+      "network-online.target"
+      "graphical.target"
+    ];
     wants = [ "network-online.target" ];
   };
-
-  # Fix for the pesky "insecure" broadcom
-  nixpkgs.config.allowInsecurePredicate = pkg:
-    builtins.elem (lib.getName pkg) [
-    "broadcom-sta" # aka “wl”
-  ];
-  
 }
 
 # Notes
