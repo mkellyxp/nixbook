@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 {
   nixpkgs.config.allowUnfree = true;
   # Fix for the pesky "insecure" broadcom
