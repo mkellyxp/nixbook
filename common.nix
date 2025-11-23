@@ -36,3 +36,11 @@
     system-config-printer
   ];
 }
+
+## NOTES ##
+# To enable auto login for user, add this to your /etc/nixos/configuration.nix
+#
+# services.displayManager.autoLogin = {
+#   enable = true;
+#   user = "user";   #make "user" whatever your username is
+# }
