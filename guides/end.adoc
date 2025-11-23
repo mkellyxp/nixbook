@@ -1,0 +1,5 @@
+**That's it! Reboot about once a month and your computer should run perfectly for years to come.**
+
+If you have any questions, comments, or issues, check out the project’s page at:
+
+https://github.com/mkellyxp/nixbook
