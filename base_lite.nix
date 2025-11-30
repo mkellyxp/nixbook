@@ -131,7 +131,7 @@ in
 
   # Enable automatic timezone (automatic-timezoned)
   services.automatic-timezoned.enable = true;
-
+  time.timeZone = null;
   systemd.services."auto-upgrade" = {
     script = ''
       set -eu
