@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   nixChannel = "https://nixos.org/channels/nixos-25.05";
 
@@ -46,7 +51,11 @@ let
   '';
 in
 {
-  zramSwap.enable = true;
+  imports = [
+    ./common.nix
+    ./installed.nix
+  ];
+
   zramSwap.memoryPercent = 100;
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=10s
@@ -91,7 +100,7 @@ in
 
   # Auto update config and channel
   systemd.timers."auto-update-config" = {
-  wantedBy = [ "timers.target" ];
+    wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "Tue..Sun";
       Persistent = true;
@@ -115,13 +124,16 @@ in
       MemoryHigh = "500M";
     };
 
-    after = [ "network-online.target" "graphical.target" ];
+    after = [
+      "network-online.target"
+      "graphical.target"
+    ];
     wants = [ "network-online.target" ];
   };
 
   # Auto Upgrade NixOS
   systemd.timers."auto-upgrade" = {
-  wantedBy = [ "timers.target" ];
+    wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "Mon";
       Persistent = true;
@@ -156,7 +168,10 @@ in
       MemoryHigh = "500M";
     };
 
-    after = [ "network-online.target" "graphical.target" ];
+    after = [
+      "network-online.target"
+      "graphical.target"
+    ];
     wants = [ "network-online.target" ];
   };
 
