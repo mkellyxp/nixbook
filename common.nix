@@ -2,9 +2,7 @@
 { pkgs, lib, ... }:
 
 {
-  imports = [
-    ./chromebook.nix
-  ];
+  imports = [ ./chromebook.nix ];
 
   zramSwap.enable = true;
 
