@@ -47,9 +47,8 @@ in {
   imports = [ ./common.nix ./installed.nix ];
 
   zramSwap.memoryPercent = 100;
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
-  '';
+
+  systemd.settings.Manager = { DefaultTimeoutStopSec = "10s"; };
 
   nix.gc = {
     automatic = true;
