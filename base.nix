@@ -93,7 +93,7 @@ let
 in {
   imports = [ ./common.nix ./installed.nix ];
 
-  systemd.settings.Manager = { DefaultTimeoutStopSec = "10s"; };
+  zramSwap.memoryPercent = 100;
 
   xdg.portal.enable = true;
   environment.systemPackages = with pkgs; [

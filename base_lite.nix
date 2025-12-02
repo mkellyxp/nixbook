@@ -48,8 +48,6 @@ in {
 
   zramSwap.memoryPercent = 100;
 
-  systemd.settings.Manager = { DefaultTimeoutStopSec = "10s"; };
-
   nix.gc = {
     automatic = true;
     dates = "Mon 3:40";
