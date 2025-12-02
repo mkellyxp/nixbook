@@ -93,9 +93,7 @@ let
 in {
   imports = [ ./common.nix ./installed.nix ];
 
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
-  '';
+  systemd.settings.Manager = { DefaultTimeoutStopSec = "10s"; };
 
   xdg.portal.enable = true;
   environment.systemPackages = with pkgs; [
