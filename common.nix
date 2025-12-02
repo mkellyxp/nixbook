@@ -2,9 +2,7 @@
 { pkgs, lib, ... }:
 
 {
-  imports = [
-    ./chromebook.nix
-  ];
+  imports = [ ./chromebook.nix ];
 
   zramSwap.enable = true;
 
@@ -36,3 +34,15 @@
     system-config-printer
   ];
 }
+
+## NOTES ##
+# To enable auto login for user, add this to your /etc/nixos/configuration.nix
+#
+# services.displayManager.autoLogin = {
+#   enable = true;
+#   user = "user";   #make "user" whatever your username is
+# }
+#
+# To stop chrome from asking for a password anyway, copy desktop file from
+# /var/lib/flatpak/exports/share/applications/ to ~/.local/share/applications
+# and change Exec = to add in "--password-store=basic"

@@ -1,11 +1,6 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 let
-  nixChannel = "https://nixos.org/channels/nixos-25.05";
+  nixChannel = "https://nixos.org/channels/nixos-25.11";
 
   ## Notify Users Script
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
@@ -34,7 +29,6 @@ let
         ${pkgs.dconf}/bin/dconf write /org/gnome/software/flatpak-updates false || true
 
     done
-
   '';
 
   ## Update Git and Channel Script
@@ -96,16 +90,10 @@ let
     fi
 
   '';
-in
-{
-  imports = [
-    ./common.nix
-    ./installed.nix
-  ];
+in {
+  imports = [ ./common.nix ./installed.nix ];
 
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
-  '';
+  zramSwap.memoryPercent = 100;
 
   xdg.portal.enable = true;
   environment.systemPackages = with pkgs; [
@@ -142,10 +130,7 @@ in
       RestartSec = "30s";
     };
 
-    after = [
-      "network-online.target"
-      "flatpak-system-helper.service"
-    ];
+    after = [ "network-online.target" "flatpak-system-helper.service" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
   };
@@ -184,10 +169,7 @@ in
       IOWeight = "20";
     };
 
-    after = [
-      "network-online.target"
-      "graphical.target"
-    ];
+    after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
   };
 
@@ -227,10 +209,7 @@ in
       IOWeight = "20";
     };
 
-    after = [
-      "network-online.target"
-      "graphical.target"
-    ];
+    after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
   };
 }

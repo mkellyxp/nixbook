@@ -1,11 +1,6 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 let
-  nixChannel = "https://nixos.org/channels/nixos-25.05";
+  nixChannel = "https://nixos.org/channels/nixos-25.11";
 
   ## Notify Users Script
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
@@ -29,7 +24,6 @@ let
         ${pkgs.libnotify}/bin/notify-send "$title" "$body" || true
 
     done
-
   '';
 
   ## Update Git and Channel Script
@@ -49,17 +43,10 @@ let
       ${pkgs.nix}/bin/nix-channel --update
     fi
   '';
-in
-{
-  imports = [
-    ./common.nix
-    ./installed.nix
-  ];
+in {
+  imports = [ ./common.nix ./installed.nix ];
 
   zramSwap.memoryPercent = 100;
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
-  '';
 
   nix.gc = {
     automatic = true;
@@ -93,10 +80,7 @@ in
       MemoryHigh = "500M";
     };
 
-    after = [
-      "network-online.target"
-      "graphical.target"
-    ];
+    after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
   };
 
@@ -134,10 +118,7 @@ in
       MemoryHigh = "500M";
     };
 
-    after = [
-      "network-online.target"
-      "graphical.target"
-    ];
+    after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
   };
 }
