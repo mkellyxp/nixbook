@@ -4,6 +4,8 @@ read -p "Do you want to continue? (y/n): " answer
 if [[ "$answer" =~ ^[Yy]$ ]]; then
   echo "Updating Nixbook..."
 
+  /etc/nixbook/repair.sh
+  
   sudo systemctl start auto-update-config.service;
 
   # Free up space before updates
@@ -11,9 +13,6 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
 
   # get the updates
   sudo nixos-rebuild boot --upgrade
-
-  # free up a little more space with hard links
-  nix-store --optimise
 
   systemctl poweroff
 else

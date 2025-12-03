@@ -5,6 +5,7 @@
   imports = [ ./chromebook.nix ];
 
   zramSwap.enable = true;
+  zramSwap.memoryPercent = 100;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;

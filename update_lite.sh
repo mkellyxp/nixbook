@@ -12,9 +12,6 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
   # get the updates
   sudo nixos-rebuild boot --upgrade
 
-  # free up a little more space with hard links
-  nix-store --optimise
-
   reboot
 else
   echo "Update Cancelled!"
