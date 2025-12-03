@@ -6,10 +6,10 @@ sudo flatpak repair --system
 sudo flatpak update
  
 # Will make sure Nixbook is on the correct channel
-currentChannel=$(${pkgs.nix}/bin/nix-channel --list | ${pkgs.gnugrep}/bin/grep '^nixos' | ${pkgs.gawk}/bin/awk '{print $2}')
+currentChannel=$(sudo nix-channel --list | grep '^nixos' | awk '{print $2}')
 targetChannel="https://nixos.org/channels/nixos-25.11"
 
 if [ "$currentChannel" != "$targetChannel" ]; then
-  ${pkgs.nix}/bin/nix-channel --add "$targetChannel" nixos
-  ${pkgs.nix}/bin/nix-channel --update
+  sudo nix-channel --add "$targetChannel" nixos
+  sudo nix-channel --update
 fi
