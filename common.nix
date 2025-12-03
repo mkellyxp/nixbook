@@ -23,6 +23,16 @@
     openFirewall = true;
   };
 
+  # For Chris at LUP :)
+  settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
+
+  # Better VM Support
+  services.spice-vdagentd.enable = true;
+
+  # Common Packages
   environment.systemPackages = with pkgs; [
     git
     firefox
