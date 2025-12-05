@@ -29,9 +29,6 @@
     "flakes"
   ];
 
-  # Better VM Support
-  services.spice-vdagentd.enable = true;
-
   # Common Packages
   environment.systemPackages = with pkgs; [
     git
