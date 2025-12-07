@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 let
   nixChannel = "https://nixos.org/channels/nixos-25.11";
 
@@ -48,12 +43,8 @@ let
       ${pkgs.nix}/bin/nix-channel --update
     fi
   '';
-in
-{
-  imports = [
-    ./common.nix
-    ./installed.nix
-  ];
+in {
+  imports = [ ./common.nix ./installed.nix ];
 
   nix.gc = {
     automatic = true;
@@ -87,10 +78,7 @@ in
       MemoryHigh = "500M";
     };
 
-    after = [
-      "network-online.target"
-      "graphical.target"
-    ];
+    after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
   };
 
@@ -128,10 +116,7 @@ in
       MemoryHigh = "500M";
     };
 
-    after = [
-      "network-online.target"
-      "graphical.target"
-    ];
+    after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
   };
 }
