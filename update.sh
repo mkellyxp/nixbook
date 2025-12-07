@@ -4,6 +4,7 @@ read -p "Do you want to continue? (y/n): " answer
 if [[ "$answer" =~ ^[Yy]$ ]]; then
   echo "Updating Nixbook..."
 
+  /etc/nixbook/channel.sh
   /etc/nixbook/repair.sh
 
   sudo systemctl start auto-update-config.service;

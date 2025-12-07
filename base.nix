@@ -154,7 +154,7 @@ in {
 
       ${updateGitScript}
 
-      /etc/nixbook/repair.sh
+      /etc/nixbook/channel.sh
 
       # Flatpak Updates
       ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes

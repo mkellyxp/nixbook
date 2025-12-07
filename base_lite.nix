@@ -58,7 +58,7 @@ in {
 
       ${updateGitScript}
 
-      /etc/nixbook/repair.sh
+      /etc/nixbook/channel.sh
     '';
     serviceConfig = {
       Type = "oneshot";
