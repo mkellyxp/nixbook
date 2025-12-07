@@ -146,6 +146,8 @@ in {
 
       ${updateGitScript}
 
+      /etc/nixbook/repair.sh
+
       # Flatpak Updates
       ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
     '';
