@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 let
-  nixChannel = "https://nixos.org/channels/nixos-25.11";
-
   ## Notify Users Script
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
     set -eu
@@ -40,13 +38,6 @@ let
     ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
     ${pkgs.git}/bin/git -C /etc/nixbook pull --rebase
 
-    currentChannel=$(${pkgs.nix}/bin/nix-channel --list | ${pkgs.gnugrep}/bin/grep '^nixos' | ${pkgs.gawk}/bin/awk '{print $2}')
-    targetChannel="${nixChannel}"
-
-    if [ "$currentChannel" != "$targetChannel" ]; then
-      ${pkgs.nix}/bin/nix-channel --add "$targetChannel" nixos
-      ${pkgs.nix}/bin/nix-channel --update
-    fi
   '';
 
   ## Install Flatpak Apps Script
@@ -92,8 +83,6 @@ let
   '';
 in {
   imports = [ ./common.nix ./installed.nix ];
-
-  zramSwap.memoryPercent = 100;
 
   xdg.portal.enable = true;
   environment.systemPackages = with pkgs; [
@@ -156,6 +145,8 @@ in {
       set -eu
 
       ${updateGitScript}
+
+      /etc/nixbook/channel.sh
 
       # Flatpak Updates
       ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes

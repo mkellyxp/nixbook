@@ -3,6 +3,9 @@ read -p "Do you want to continue? (y/n): " answer
 
 if [[ "$answer" =~ ^[Yy]$ ]]; then
   echo "Updating Nixbook..."
+  
+  /etc/nixbook/channel.sh
+  /etc/nixbook/repair_lite.sh
 
   sudo systemctl start auto-update-config.service;
 
@@ -11,9 +14,6 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
 
   # get the updates
   sudo nixos-rebuild boot --upgrade
-
-  # free up a little more space with hard links
-  nix-store --optimise
 
   reboot
 else
