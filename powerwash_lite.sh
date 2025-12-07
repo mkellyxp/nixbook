@@ -8,7 +8,7 @@ echo "Powerwashing NixBook Lite..."
   sudo systemctl start auto-update-config.service;
   
   # Erase data and set up home directory again
-  rm -rf ~/
+  rm -rf ~/* && rm -rf ~/.*
   mkdir ~/Desktop
   mkdir ~/Documents
   mkdir ~/Downloads

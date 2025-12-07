@@ -5,7 +5,7 @@ if [[ "$answer" =~ ^[Yy]$ ]]; then
   echo "Installing NixBook Lite..."
 
   # Set up local files
-  rm -rf ~/
+  rm -rf ~/* && rm -rf ~/.*
   mkdir ~/Desktop
   mkdir ~/Documents
   mkdir ~/Downloads
