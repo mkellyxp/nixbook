@@ -141,6 +141,14 @@ in {
   };
 
   systemd.services."auto-update-config" = {
+    path = with pkgs; [
+      flatpak
+      nix
+      gawk # for awk
+      gnugrep # for grep
+      coreutils # just in case
+    ];
+
     script = ''
       set -eu
 

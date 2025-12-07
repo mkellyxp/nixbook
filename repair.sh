@@ -3,7 +3,7 @@
 
 # Fixes rare, but annoying issue with flatpak updates failing due to corrupt files.
 sudo flatpak repair --system
-sudo flatpak update
+sudo flatpak update -y
  
 # Will make sure Nixbook is on the correct channel
 currentChannel=$(sudo nix-channel --list | grep '^nixos' | awk '{print $2}')
