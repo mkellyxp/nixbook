@@ -1,12 +1,5 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 let
-  nixChannel = "https://nixos.org/channels/nixos-25.05";
-
   ## Notify Users Script
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
     set -eu
@@ -29,7 +22,6 @@ let
         ${pkgs.libnotify}/bin/notify-send "$title" "$body" || true
 
     done
-
   '';
 
   ## Update Git and Channel Script
@@ -40,26 +32,9 @@ let
     ${pkgs.git}/bin/git -C /etc/nixbook reset --hard
     ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
     ${pkgs.git}/bin/git -C /etc/nixbook pull --rebase
-
-    currentChannel=$(${pkgs.nix}/bin/nix-channel --list | ${pkgs.gnugrep}/bin/grep '^nixos' | ${pkgs.gawk}/bin/awk '{print $2}')
-    targetChannel="${nixChannel}"
-
-    if [ "$currentChannel" != "$targetChannel" ]; then
-      ${pkgs.nix}/bin/nix-channel --add "$targetChannel" nixos
-      ${pkgs.nix}/bin/nix-channel --update
-    fi
   '';
-in
-{
-  imports = [
-    ./common.nix
-    ./installed.nix
-  ];
-
-  zramSwap.memoryPercent = 100;
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
-  '';
+in {
+  imports = [ ./common.nix ./installed.nix ];
 
   nix.gc = {
     automatic = true;
@@ -82,6 +57,8 @@ in
       set -eu
 
       ${updateGitScript}
+
+      /etc/nixbook/channel.sh
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -93,10 +70,7 @@ in
       MemoryHigh = "500M";
     };
 
-    after = [
-      "network-online.target"
-      "graphical.target"
-    ];
+    after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
   };
 
@@ -134,10 +108,7 @@ in
       MemoryHigh = "500M";
     };
 
-    after = [
-      "network-online.target"
-      "graphical.target"
-    ];
+    after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
   };
 }

@@ -1,12 +1,5 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 let
-  nixChannel = "https://nixos.org/channels/nixos-25.05";
-
   ## Notify Users Script
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
     set -eu
@@ -34,7 +27,6 @@ let
         ${pkgs.dconf}/bin/dconf write /org/gnome/software/flatpak-updates false || true
 
     done
-
   '';
 
   ## Update Git and Channel Script
@@ -46,13 +38,6 @@ let
     ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
     ${pkgs.git}/bin/git -C /etc/nixbook pull --rebase
 
-    currentChannel=$(${pkgs.nix}/bin/nix-channel --list | ${pkgs.gnugrep}/bin/grep '^nixos' | ${pkgs.gawk}/bin/awk '{print $2}')
-    targetChannel="${nixChannel}"
-
-    if [ "$currentChannel" != "$targetChannel" ]; then
-      ${pkgs.nix}/bin/nix-channel --add "$targetChannel" nixos
-      ${pkgs.nix}/bin/nix-channel --update
-    fi
   '';
 
   ## Install Flatpak Apps Script
@@ -96,16 +81,8 @@ let
     fi
 
   '';
-in
-{
-  imports = [
-    ./common.nix
-    ./installed.nix
-  ];
-
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
-  '';
+in {
+  imports = [ ./common.nix ./installed.nix ];
 
   xdg.portal.enable = true;
   environment.systemPackages = with pkgs; [
@@ -142,10 +119,7 @@ in
       RestartSec = "30s";
     };
 
-    after = [
-      "network-online.target"
-      "flatpak-system-helper.service"
-    ];
+    after = [ "network-online.target" "flatpak-system-helper.service" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
   };
@@ -172,6 +146,8 @@ in
 
       ${updateGitScript}
 
+      /etc/nixbook/channel.sh
+
       # Flatpak Updates
       ${pkgs.flatpak}/bin/flatpak update --noninteractive --assumeyes
     '';
@@ -184,10 +160,7 @@ in
       IOWeight = "20";
     };
 
-    after = [
-      "network-online.target"
-      "graphical.target"
-    ];
+    after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
   };
 
@@ -227,10 +200,7 @@ in
       IOWeight = "20";
     };
 
-    after = [
-      "network-online.target"
-      "graphical.target"
-    ];
+    after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
   };
 }
