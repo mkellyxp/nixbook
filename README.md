@@ -22,9 +22,10 @@ The **nixbook lite** version:
 
 ![Screenshot from 2024-10-22 10-31-24](https://github.com/user-attachments/assets/53fc76ad-5861-46d8-895a-b4be1e1b2816)
 
+---
 
-## Download ISO
-[Click here to download the ISO](https://s3.membervaultcdn.com/nixbook/nixbook-installer-25.05.20250726.iso)
+## Download the Installer
+[Click here to download the ISO](https://s3.membervaultcdn.com/nixbook/nixbook-installer-25.11.iso)
 
 ---
 You can always manually run updates by running **Update and Reboot** in the menu.
