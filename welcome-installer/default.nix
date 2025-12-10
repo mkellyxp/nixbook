@@ -4,7 +4,8 @@ let
   pythonEnv = pkgs.python3.withPackages (ps: [
     ps.pygobject3
   ]);
-in {
+in
+{
   environment.systemPackages = with pkgs; [
     (pkgs.writeShellScriptBin "welcome-installer" ''
       exec ${pythonEnv}/bin/python3 ${./welcome_installer.py}
@@ -18,3 +19,6 @@ in {
 
 # To manually run:
 #   python3 welcome_installer.py
+#
+# Nix-shell it with:
+#   nix-shell -p python3 gtk3 gobject-introspection python3Packages.pygobject3 flatpak --run 'python3 welcome_installer.py'
