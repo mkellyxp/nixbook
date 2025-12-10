@@ -36,6 +36,37 @@ let
 in {
   imports = [ ./common.nix ./installed.nix ];
 
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+  nixpkgs.config.allowUnfree = true;
+  hardware.bluetooth.enable = true;
+
+  # Enable the Cinnamon Desktop Environment.
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.cinnamon.enable = true;
+  xdg.portal.enable = true;
+
+  # Enable Printing
+  services.printing.enable = true;
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
+
+  environment.systemPackages = with pkgs; [
+    git
+    firefox
+    libnotify
+    gawk
+    sudo
+    gnome-calculator
+    gnome-calendar
+    gnome-screenshot
+    system-config-printer
+    automatic-timezoned
+  ];
+
   nix.gc = {
     automatic = true;
     dates = "Mon 3:40";
@@ -84,6 +115,9 @@ in {
     };
   };
 
+  # Enable automatic timezone (automatic-timezoned)
+  services.automatic-timezoned.enable = true;
+  time.timeZone = null;
   systemd.services."auto-upgrade" = {
     script = ''
       set -eu
@@ -93,7 +127,7 @@ in {
       ${updateGitScript}
 
       ${notifyUsersScript} "Starting System Updates" "System updates are installing in the background.  You can continue to use your computer while these are running."
-            
+
       ${pkgs.nixos-rebuild}/bin/nixos-rebuild boot --upgrade
 
       ${notifyUsersScript} "System Updates Complete" "Updates are complete!  Simply reboot the computer whenever is convenient to apply updates."
@@ -111,4 +145,11 @@ in {
     after = [ "network-online.target" "graphical.target" ];
     wants = [ "network-online.target" ];
   };
+
+  # Fix for the pesky "insecure" broadcom
+  nixpkgs.config.allowInsecurePredicate = pkg:
+    builtins.elem (lib.getName pkg) [
+    "broadcom-sta" # aka “wl”
+  ];
+
 }
