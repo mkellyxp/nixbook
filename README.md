@@ -1,6 +1,6 @@
 ![nixbook os logo](https://github.com/user-attachments/assets/8511e040-ebf0-4090-b920-c051b23fcc9c)
 
-**Convert your old computer (even chromebook) to a user friendly, lightweight, durable, and auto updating operating system build on top of NixOS.**
+**Convert your old computer (even chromebook) to a user friendly, lightweight, durable, and auto updating system with a reliable NixOS configuration.**
 
 The goal is to create a "chromebook like" unbreakable computer to give to basic users who know nothing about Linux and won't need to ever worry about updates / upgrades.
 
