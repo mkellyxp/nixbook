@@ -8,3 +8,10 @@
     nixfmt
   ];
 }
+
+# To configure helix to use the nix formatter, put this in languages.toml
+#
+# [[language]]
+# name = "nix"
+# formatter = { command = "nixfmt" }
+# auto-format = true
