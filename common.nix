@@ -23,6 +23,11 @@
     openFirewall = true;
   };
 
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
+
   # For Chris at LUP :)
   nix.settings.experimental-features = [
     "nix-command"
