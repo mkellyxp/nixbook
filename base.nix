@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   ## Notify Users Script
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
@@ -81,8 +86,12 @@ let
     fi
 
   '';
-in {
-  imports = [ ./common.nix ./installed.nix ];
+in
+{
+  imports = [
+    ./common.nix
+    ./installed.nix
+  ];
 
   xdg.portal.enable = true;
   environment.systemPackages = with pkgs; [
@@ -119,15 +128,12 @@ in {
       RestartSec = "30s";
     };
 
-    after = [ "network-online.target" "flatpak-system-helper.service" ];
+    after = [
+      "network-online.target"
+      "flatpak-system-helper.service"
+    ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
-  };
-
-  nix.gc = {
-    automatic = true;
-    dates = "Mon 3:40";
-    options = "--delete-older-than 30d";
   };
 
   # Auto update config, flatpak and channel
@@ -160,7 +166,10 @@ in {
       IOWeight = "20";
     };
 
-    after = [ "network-online.target" "graphical.target" ];
+    after = [
+      "network-online.target"
+      "graphical.target"
+    ];
     wants = [ "network-online.target" ];
   };
 
@@ -200,7 +209,10 @@ in {
       IOWeight = "20";
     };
 
-    after = [ "network-online.target" "graphical.target" ];
+    after = [
+      "network-online.target"
+      "graphical.target"
+    ];
     wants = [ "network-online.target" ];
   };
 }
