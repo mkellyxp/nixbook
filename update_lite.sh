@@ -3,6 +3,7 @@ read -p "Do you want to continue? (y/n): " answer
 
 if [[ "$answer" =~ ^[Yy]$ ]]; then
   echo "Updating Nixbook..."
+  sudo systemctl stop auto-upgrade.service
   
   /etc/nixbook/channel.sh
   /etc/nixbook/repair_lite.sh
