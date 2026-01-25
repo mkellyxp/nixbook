@@ -23,6 +23,11 @@
     openFirewall = true;
   };
 
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
+
   # For Chris at LUP :)
   nix.settings.experimental-features = [
     "nix-command"
@@ -53,6 +58,16 @@
     gnome-screenshot
     system-config-printer
   ];
+
+  fonts = {
+    packages = with pkgs; [
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+      noto-fonts-color-emoji
+    ];
+    fontDir.enable = true;
+  };
+
 }
 
 ## NOTES ##

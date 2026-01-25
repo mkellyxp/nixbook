@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   ## Notify Users Script
   notifyUsersScript = pkgs.writeScript "notify-users.sh" ''
@@ -33,14 +38,12 @@ let
     ${pkgs.git}/bin/git -C /etc/nixbook clean -fd
     ${pkgs.git}/bin/git -C /etc/nixbook pull --rebase
   '';
-in {
-  imports = [ ./common.nix ./installed.nix ];
-
-  nix.gc = {
-    automatic = true;
-    dates = "Mon 3:40";
-    options = "--delete-older-than 14d";
-  };
+in
+{
+  imports = [
+    ./common.nix
+    ./installed.nix
+  ];
 
   # Auto update config and channel
   systemd.timers."auto-update-config" = {
@@ -70,7 +73,10 @@ in {
       MemoryHigh = "500M";
     };
 
-    after = [ "network-online.target" "graphical.target" ];
+    after = [
+      "network-online.target"
+      "graphical.target"
+    ];
     wants = [ "network-online.target" ];
   };
 
@@ -108,7 +114,10 @@ in {
       MemoryHigh = "500M";
     };
 
-    after = [ "network-online.target" "graphical.target" ];
+    after = [
+      "network-online.target"
+      "graphical.target"
+    ];
     wants = [ "network-online.target" ];
   };
 }
