@@ -7,6 +7,22 @@
   zramSwap.enable = true;
   zramSwap.memoryPercent = 100;
 
+  # Plymouth boot splash screen - hides boot text for cleaner startup
+  boot.plymouth.enable = true;
+  boot.consoleLogLevel = 0;
+  boot.initrd.verbose = false;
+  boot.kernelParams = [
+    "quiet"
+    "splash"
+    "loglevel=3"
+    "rd.systemd.show_status=false"
+    "rd.udev.log_level=3"
+    "udev.log_level=3"
+  ];
+
+  # GRUB bootloader settings for silent boot (hides early kernel messages)
+  boot.loader.grub.gfxpayloadBios = "keep";
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   hardware.bluetooth.enable = true;
