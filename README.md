@@ -82,4 +82,4 @@ Remember,
 
 > The goal is to create a "chromebook like" unbreakable computer to give to basic users who know nothing about Linux and won't need to ever worry about updates / upgrades.
 
-This OS may be missing some packages you expect out of the box on many Linux distros. You can add them yourself. If you want to customize, put your nix changes directly into `/etc/nixos/configuration.nix`. For example, `sudo nano /etc/configuration.nix`. Don't modify the .nix files in this repo, as they'll get overwritten on update.  You can create a temporary shell with the needed package (for example, ffmpeg) with `nix-shell -p ffmpeg`.
+This OS may be missing some packages you expect out of the box on many Linux distros. You can add them yourself. If you want to customize, put your nix changes directly into `/etc/nixos/configuration.nix`. For example, `sudo nano /etc/configuration.nix`. Don't modify the .nix files in this repo, as they'll get overwritten on update.  You can create a temporary shell with the needed package (for example, `hello`) with `nix-shell -p hello`.
