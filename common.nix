@@ -26,6 +26,7 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   hardware.bluetooth.enable = true;
+  hardware.acpilight.enable = true;
 
   # Enable the Cinnamon Desktop Environment.
   services.xserver.displayManager.lightdm.enable = lib.mkDefault true;
