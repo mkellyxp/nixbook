@@ -72,41 +72,11 @@
     fontDir.enable = true;
   };
 
-  # Stage wallpapers into the Nix store
-  environment.etc."nixbook-wallpapers" = {
-    source = ./wallpapers;
-  };
-
-  environment.etc."share/gnome-background-properties/nixbook-wallpapers.xml" = {
+  environment.etc."skel/.config/cinnamon/backgrounds/user-folders.lst" = {
     text = ''
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
-      <wallpapers>
-        <wallpaper deleted="false">
-          <name>Nixbook 01</name>
-          <filename>/usr/share/backgrounds/nixbook/coffee.jpg</filename>
-          <options>zoom</options>
-        </wallpaper>
-        <wallpaper deleted="false">
-          <name>Nixbook 02</name>
-          <filename>/usr/share/backgrounds/nixbook/flamingo.jpg</filename>
-          <options>zoom</options>
-        </wallpaper>
-        <wallpaper deleted="false">
-          <name>Nixbook 03</name>
-          <filename>/usr/share/backgrounds/nixbook/kiwis.jpg</filename>
-          <options>zoom</options>
-        </wallpaper>
-      </wallpapers>
+      /etc/nixbook/wallpapers
     '';
   };
-
-  # Symlink the wallpapers directory into the standard path Cinnamon scans
-  systemd.tmpfiles.rules = [
-    "L+ /usr/share/backgrounds/nixbook - - - - /etc/nixbook-wallpapers"
-    "L+ /usr/share/gnome-background-properties/nixbook-wallpapers.xml - - - - /etc/share/gnome-background-properties/nixbook-wallpapers.xml"
-  ];
-
 }
 
 ## NOTES ##
