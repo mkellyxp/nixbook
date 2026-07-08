@@ -72,6 +72,16 @@
     fontDir.enable = true;
   };
 
+  # Stage wallpapers into the Nix store
+  environment.etc."nixbook-wallpapers" = {
+    source = ./wallpapers;
+  };
+
+  # Symlink the wallpapers directory into the standard path Cinnamon scans
+  systemd.tmpfiles.rules = [
+    "L+ /usr/share/backgrounds/nixbook - - - - /etc/nixbook-wallpapers"
+  ];
+
 }
 
 ## NOTES ##
