@@ -71,12 +71,6 @@
     ];
     fontDir.enable = true;
   };
-
-  environment.etc."skel/.config/cinnamon/backgrounds/user-folders.lst" = {
-    text = ''
-      /etc/nixbook/wallpapers
-    '';
-  };
 }
 
 ## NOTES ##

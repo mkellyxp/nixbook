@@ -45,6 +45,16 @@ in
     ./installed.nix
   ];
 
+  environment.etc = {
+    "skel/.config/cinnamon/backgrounds/user-folders.lst".text = ''
+      /etc/nixbook/wallpapers
+    '';
+
+    "skel/.config".source = ./config/config_lite;
+    "skel/Desktop".source = ./config/desktop_lite;
+    "skel/.local/share/applications".source = ./config/applications_lite;
+  };
+
   # Auto update config and channel
   systemd.timers."auto-update-config" = {
     wantedBy = [ "timers.target" ];
