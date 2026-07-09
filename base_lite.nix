@@ -45,10 +45,22 @@ in
     ./installed.nix
   ];
 
-  environment.etc = {
-    "skel/.config".source = ./config/config_lite;
-    "skel/Desktop".source = ./config/desktop_lite;
-    "skel/.local/share/applications".source = ./config/applications_lite;
+  system.activationScripts.populateSkel = {
+    text = ''
+      mkdir -p /etc/skel/.config
+      mkdir -p /etc/skel/Desktop
+      mkdir -p /etc/skel/.local/share/applications
+
+      cp -rT /etc/nixbook/config/config_lite /etc/skel/.config
+      cp -rT /etc/nixbook/config/desktop_lite /etc/skel/Desktop
+      cp -rT /etc/nixbook/config/applications_lite /etc/skel/.local/share/applications
+
+      chmod -R 644 /etc/skel/.config
+      chmod -R 644 /etc/skel/Desktop  
+      chmod -R 644 /etc/skel/.local/share/applications
+      find /etc/skel -type d -exec chmod 755 {} \;
+    '';
+    deps = [ ];
   };
 
   # Auto update config and channel
