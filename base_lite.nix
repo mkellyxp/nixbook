@@ -45,10 +45,10 @@ in
     ./installed.nix
   ];
 
-  environment.etc."skel/.config/cinnamon/backgrounds/user-folders.lst" = {
-    text = ''
-      /etc/nixbook/wallpapers
-    '';
+  environment.etc = {
+    "skel/.config".source = ./config/config_lite;
+    "skel/Desktop".source = ./config/desktop_lite;
+    "skel/.local/share/applications".source = ./config/applications_lite;
   };
 
   # Auto update config and channel

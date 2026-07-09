@@ -113,10 +113,10 @@ in
     })
   ];
 
-  environment.etc."skel/.config/cinnamon/backgrounds/user-folders.lst" = {
-    text = ''
-      /etc/nixbook/wallpapers
-    '';
+  environment.etc = {
+    "skel/.config".source = ./config/config;
+    "skel/Desktop".source = ./config/desktop;
+    "skel/.local/share/applications".source = ./config/applications;
   };
 
   services.flatpak.enable = true;
