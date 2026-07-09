@@ -113,10 +113,22 @@ in
     })
   ];
 
-  environment.etc = {
-    "skel/.config".source = ./config/config;
-    "skel/Desktop".source = ./config/desktop;
-    "skel/.local/share/applications".source = ./config/applications;
+  system.activationScripts.populateSkel = {
+    text = ''
+      mkdir -p /etc/skel/.config
+      mkdir -p /etc/skel/Desktop
+      mkdir -p /etc/skel/.local/share/applications
+
+      cp -rT /etc/nixbook/config/config /etc/skel/.config
+      cp -rT /etc/nixbook/config/desktop /etc/skel/Desktop
+      cp -rT /etc/nixbook/config/applications /etc/skel/.local/share/applications
+
+      chmod -R 644 /etc/skel/.config
+      chmod -R 644 /etc/skel/Desktop  
+      chmod -R 644 /etc/skel/.local/share/applications
+      find /etc/skel -type d -exec chmod 755 {} \;
+    '';
+    deps = [ ];
   };
 
   services.flatpak.enable = true;
