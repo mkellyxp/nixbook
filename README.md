@@ -4,19 +4,21 @@
 
 The goal is to create a "chromebook like" unbreakable computer to give to basic users who know nothing about Linux and won't need to ever worry about updates / upgrades.
 
+Advanced users: see caveats below.
+
 ---
 
 The default **nixbook** version:
-- ***32 gigs of storage and 4 gigs of ram recommended***
-- configured cinnamon desktop and firefox base
+- ***32 GB of storage and 4 GB of ram recommended***
+- configured cinnamon desktop (like Linux Mint) and firefox base
 - Chrome, Zoom, and Libreoffice installed by default flathub enabled out of the box.
 - Automatic weekly OS updates with 4 weeks of roll backs
 - Daily flatpak updates
 
 
 The **nixbook lite** version:
-- ***16 gigs of storage and 2 gigs of ram recommended***
-- configured cinnamon desktop and firefox base
+- ***32 GB of storage and 2 GB of ram recommended***
+- configured cinnamon desktop (like Linux Mint) and firefox base
 - Automatic weekly updates with 2 weeks of roll backs
   
 
@@ -37,8 +39,6 @@ If you want to completely reset this nixbook, wipe off your personal data to giv
 Notes:
 - The Nix channel will be updated from this git config once tested, and will auto apply to your machine within a week
 - Simply reboot for OS updates to apply.
-- Don't modify the .nix files in this repo, as they'll get overwritten on update.  If you want to customize, put your nix changes directly into /etc/nixos/configuration.nix
-
 
 ![Screenshot from 2024-10-12 10-40-07](https://github.com/user-attachments/assets/3540074a-e11e-4a88-a812-4ef3d4c83f0b)
 
@@ -68,3 +68,18 @@ Then you can start the autoupdate service again by running
 ```
 sudo systemctl restart auto-update-config
 ```
+
+---
+
+Advanced Users:
+
+- Encryption is not supported #63
+- Dual boot is not supported and probably will not work out of the box
+- Nix has high storage requirements. It is not super feasible to use below 32 GB of storage. #59
+- NixOS manages packages differently from other distros. See below, and [this page](https://nixos.org/manual/nixos/stable/#sec-package-management), and [this page](https://jorel.dev/NixOS4Noobs/nixsandboxes.html).
+
+Remember,
+
+> The goal is to create a "chromebook like" unbreakable computer to give to basic users who know nothing about Linux and won't need to ever worry about updates / upgrades.
+
+This OS may be missing some packages you expect out of the box on many Linux distros. You can add them yourself. If you want to customize, put your nix changes directly into `/etc/nixos/configuration.nix`. For example, `sudo nano /etc/configuration.nix`. Don't modify the .nix files in this repo, as they'll get overwritten on update.  You can create a temporary shell with the needed package (for example, `hello`) with `nix-shell -p hello`.
