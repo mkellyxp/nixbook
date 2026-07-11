@@ -74,7 +74,8 @@ sudo systemctl restart auto-update-config
 Advanced Users:
 
 - Encryption is not supported #63
-- Dual boot is not supported and probably will not work out of the box
+- Dual boot is not supported. We have reports of it working and not working.
+- Ventoy is not supported. We have one report of successfully booting and installing using Ventoy.
 - Nix has high storage requirements. It is not super feasible to use below 32 GB of storage. #59
 - NixOS manages packages differently from other distros. See below, and [this page](https://nixos.org/manual/nixos/stable/#sec-package-management), and [this page](https://jorel.dev/NixOS4Noobs/nixsandboxes.html).
 
