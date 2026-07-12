@@ -71,7 +71,6 @@
     ];
     fontDir.enable = true;
   };
-
 }
 
 ## NOTES ##
