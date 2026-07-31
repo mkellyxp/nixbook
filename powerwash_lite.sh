@@ -9,10 +9,7 @@ echo "Powerwashing NixBook Lite..."
   
   # Erase data and set up home directory again
   rm -rf ~/
-  mkdir ~/Desktop
-  mkdir ~/Documents
-  mkdir ~/Downloads
-  mkdir ~/Pictures
+  nix-shell -p xdg-user-dirs --run "xdg-user-dirs-update"
   mkdir ~/.local
   mkdir ~/.local/share
   cp -R /etc/nixbook/config/config_lite ~/.config
