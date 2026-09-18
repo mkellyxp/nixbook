@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 {
   nixpkgs.config.allowUnfree = true;
   # Fix for the pesky "insecure" broadcom
@@ -7,4 +7,7 @@
     builtins.elem (lib.getName pkg) [
       "broadcom-sta" # aka “wl”
     ];
+
+  boot.kernelModules = [ "wl" ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
 }
